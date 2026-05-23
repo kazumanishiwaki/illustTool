@@ -1,0 +1,287 @@
+{
+  "schemaVersion": 1,
+  "theme": {
+    "id": "coffee_walk",
+    "ja": "コーヒーを持って散歩している人",
+    "basePromptEn": "A single person walking outside while holding a takeaway coffee cup, full body visible, clear walking pose, one hand holding a lidded paper coffee cup, simple outdoor street setting, relaxed morning mood, casual outfit, no extra main characters",
+    "mustContain": [
+      "one walking person",
+      "takeaway coffee cup held in one hand",
+      "outdoor walking context",
+      "relaxed casual mood"
+    ],
+    "mustAvoid": [
+      "sitting person",
+      "multiple main characters",
+      "no coffee cup",
+      "indoor cafe-only scene",
+      "photorealistic",
+      "cinematic",
+      "3D render",
+      "anime",
+      "watercolor realism",
+      "detailed face",
+      "complex background",
+      "glossy gradients",
+      "over-rendered shadows",
+      "text",
+      "logo",
+      "brand name",
+      "duplicate people",
+      "missing coffee cup"
+    ]
+  },
+  "globalEvaluation": {
+    "passScore": 90,
+    "weights": {
+      "subjectAdherence": 15,
+      "lineAndShape": 20,
+      "colorPalette": 15,
+      "textureTechnique": 20,
+      "compositionDensity": 10,
+      "stylePurity": 15,
+      "productionUsefulness": 5
+    },
+    "automaticMetricWeight": 35,
+    "manualRubricWeight": 65,
+    "hardCaps": {
+      "wrongMedium": 89,
+      "photorealOr3DIntrusion": 85,
+      "wrongPaletteFamily": 80,
+      "contradictoryLineOrShape": 75
+    }
+  },
+  "styles": [
+    {
+      "id": "naive_wobbly",
+      "labelJa": "ナイーブ／ワブリー手描き",
+      "referenceGlob": "ナイーブ*",
+      "visualFingerprint": {
+        "line": "uneven hand-drawn outlines, visible wobble, casual sketch pressure",
+        "shape": "playful asymmetry, simplified anatomy, intentionally imperfect proportions",
+        "color": "light backgrounds with a few cheerful accent colors",
+        "texture": "handmade editorial drawing, not polished vector, mostly flat color",
+        "composition": "loose spacing, small narrative objects, charming irregular balance",
+        "person": "rough human figure, simplified face, expressive posture over correct anatomy"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 25,
+        "shapeLanguage": 25,
+        "textureMedium": 10,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "naive editorial illustration",
+        "imperfect hand-drawn wobbly lines",
+        "childlike uneven line quality",
+        "playful asymmetry",
+        "wonky anatomy",
+        "loose simplified human proportions",
+        "flat colors on an off-white background",
+        "charming handmade feel",
+        "minimal shading"
+      ],
+      "negativeFragments": [
+        "photorealistic",
+        "clean corporate vector",
+        "glossy 3D render",
+        "realistic anatomy",
+        "highly polished illustration",
+        "cinematic lighting"
+      ],
+      "improvementRules": {
+        "tooClean": "Add: rough uneven contour lines, imperfect sketch marks, intentionally asymmetric face and hands.",
+        "tooRealistic": "Add: flat naive drawing, no realistic anatomy, no camera lens effects.",
+        "tooCorporate": "Remove: corporate vector, geometric precision. Add: handmade editorial zine illustration.",
+        "tooBusy": "Reduce background detail; keep one person, one cup, a few walking cues."
+      }
+    },
+    {
+      "id": "grain_flat",
+      "labelJa": "グレイン入りフラット",
+      "referenceGlob": "グレイン*",
+      "visualFingerprint": {
+        "line": "clean simple contours with restrained linework",
+        "shape": "flat simplified shapes, readable silhouettes, low to medium detail",
+        "color": "muted palette with soft contrast, occasional strong blue or warm accent",
+        "texture": "visible paper grain, subtle noisy vector texture, matte surface",
+        "composition": "clear focal object, generous negative space, calm editorial layout",
+        "person": "simplified character, minimal facial detail, accessible SaaS/editorial tone"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 10,
+        "shapeLanguage": 20,
+        "textureMedium": 25,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "textured flat illustration",
+        "visible paper grain and subtle noise overlay across every shape",
+        "matte printed surface",
+        "simplified readable shapes",
+        "muted soft color palette",
+        "cream background",
+        "minimal facial features",
+        "soft editorial SaaS-style composition"
+      ],
+      "negativeFragments": [
+        "photorealistic",
+        "glossy 3D",
+        "heavy realistic shadows",
+        "complex painterly rendering",
+        "oversaturated neon palette",
+        "busy detailed background"
+      ],
+      "improvementRules": {
+        "grainWeak": "Add: visible paper grain across flat color areas, subtle print noise, matte finish.",
+        "tooDetailed": "Add: simplified silhouettes, fewer folds, fewer background elements.",
+        "tooFlatNoTexture": "Increase texture words; add grain to both figure and background.",
+        "tooDark": "Use light off-white or pale tinted background and restrained contrast."
+      }
+    },
+    {
+      "id": "print_relief",
+      "labelJa": "印刷・版画（リソ／リノカット／木版）",
+      "referenceGlob": "印刷*",
+      "visualFingerprint": {
+        "line": "bold carved marks, ink-like edges, rough printed contours",
+        "shape": "poster-like flat blocks, cutout silhouettes, simplified high-contrast forms",
+        "color": "limited spot-color palette, black plus red/pink/yellow/teal, off-white paper",
+        "texture": "risograph grain, linocut or woodblock texture, ink misregistration",
+        "composition": "strong graphic layout, print poster energy, deliberate color separation",
+        "person": "reduced to bold readable shapes, expressive silhouette rather than detailed face"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 15,
+        "shapeLanguage": 15,
+        "textureMedium": 30,
+        "composition": 10,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "risograph-inspired print illustration",
+        "linocut and woodblock print influence",
+        "limited 2-3 color spot-color palette",
+        "bold carved shapes",
+        "bold separated ink layers",
+        "rough ink texture",
+        "slight ink misregistration",
+        "visible halftone dots and ink grain",
+        "off-white paper background",
+        "poster-like composition"
+      ],
+      "negativeFragments": [
+        "smooth digital gradient",
+        "photorealistic",
+        "glossy 3D",
+        "soft airbrush",
+        "full-color realistic rendering",
+        "thin delicate line art"
+      ],
+      "improvementRules": {
+        "tooSmooth": "Add: rough ink edges, visible print texture, imperfect registration.",
+        "tooManyColors": "Limit to 2-4 spot colors plus paper and black.",
+        "tooDelicate": "Use bold carved shapes and high contrast instead of thin outlines.",
+        "tooDigital": "Add: risograph overprint, halftone grain, handmade poster print."
+      }
+    },
+    {
+      "id": "editorial_outline",
+      "labelJa": "エディトリアル・アウトライン",
+      "referenceGlob": "エディトリアル*",
+      "visualFingerprint": {
+        "line": "thin monoline outline, sparse continuous line feeling, restrained black strokes",
+        "shape": "minimal geometric simplification, light symbolic forms, little filled area",
+        "color": "mostly white or very pale background, one small accent color",
+        "texture": "clean digital line art, almost no texture, no heavy grain",
+        "composition": "large whitespace, airy layout, editorial restraint",
+        "person": "gender-neutral simplified figure, minimal face, gesture-led communication"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 30,
+        "shapeLanguage": 20,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "minimal editorial outline illustration",
+        "thin continuous black monoline drawing",
+        "large white negative space",
+        "only one or two small accent color fills",
+        "sparse continuous-line feeling",
+        "almost no solid fills",
+        "clean refined composition",
+        "refined magazine column style",
+        "minimal facial detail"
+      ],
+      "negativeFragments": [
+        "dense background",
+        "painterly texture",
+        "heavy grain",
+        "bold filled shapes",
+        "3D depth",
+        "photorealistic",
+        "many colors"
+      ],
+      "improvementRules": {
+        "tooFilled": "Remove filled color blocks; keep mostly thin outlines and one accent.",
+        "tooBusy": "Increase whitespace; reduce scene to person, cup, walking cue.",
+        "tooTextured": "Remove grain, paper texture, painterly rendering.",
+        "tooGeneric": "Add: editorial column illustration, refined monoline, sparse visual metaphor."
+      }
+    },
+    {
+      "id": "flat_vector",
+      "labelJa": "フラットベクター（コーポレート）",
+      "referenceGlob": "フラット*",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "geometric simplified forms, modular UI-like composition, high readability",
+        "color": "controlled corporate palette with blue, orange, black, pale backgrounds",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "balanced commercial layout, clear hierarchy, presentation-ready",
+        "person": "simple friendly character, minimal face, business or lifestyle readability"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      }
+    }
+  ]
+}

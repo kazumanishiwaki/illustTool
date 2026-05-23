@@ -1,0 +1,1796 @@
+{
+  "schemaVersion": 1,
+  "theme": {
+    "id": "coffee_walk",
+    "ja": "コーヒーを持って散歩している人",
+    "basePromptEn": "A single person walking outside while holding a takeaway coffee cup, full body visible, clear walking pose, one hand holding a lidded paper coffee cup, simple outdoor street setting, relaxed morning mood, casual outfit, no extra main characters",
+    "mustContain": [
+      "one walking person",
+      "takeaway coffee cup held in one hand",
+      "outdoor walking context",
+      "relaxed casual mood"
+    ],
+    "mustAvoid": [
+      "sitting person",
+      "multiple main characters",
+      "no coffee cup",
+      "indoor cafe-only scene",
+      "photorealistic",
+      "cinematic",
+      "3D render",
+      "anime",
+      "watercolor realism",
+      "detailed face",
+      "complex background",
+      "glossy gradients",
+      "over-rendered shadows",
+      "text",
+      "logo",
+      "brand name",
+      "duplicate people",
+      "missing coffee cup"
+    ]
+  },
+  "globalEvaluation": {
+    "passScore": 90,
+    "weights": {
+      "subjectAdherence": 15,
+      "lineAndShape": 20,
+      "colorPalette": 15,
+      "textureTechnique": 20,
+      "compositionDensity": 10,
+      "stylePurity": 15,
+      "productionUsefulness": 5
+    },
+    "automaticMetricWeight": 35,
+    "manualRubricWeight": 65,
+    "hardCaps": {
+      "wrongMedium": 89,
+      "photorealOr3DIntrusion": 85,
+      "wrongPaletteFamily": 80,
+      "contradictoryLineOrShape": 75
+    }
+  },
+  "styles": [
+    {
+      "id": "naive_wobbly_line",
+      "labelJa": "ゆるい手描き線（白地）",
+      "visualFingerprint": {
+        "line": "uneven wobbly hand-drawn outlines remain visible; casual sketch pressure and loose contour",
+        "shape": "simple naive forms, intentionally imperfect proportions, color may spill beyond the line",
+        "color": "single-color fill only, monochrome or one accent color plus off-white paper, no multicolor palette",
+        "texture": "rough hand-filled color, imperfect fill registration, handmade line-and-fill mismatch",
+        "composition": "loose spacing with off-white background; the rough line and one-color fill are the focal style cue",
+        "person": "rough simplified figure, imperfect hands and face, expressive posture over correct anatomy"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 25,
+        "shapeLanguage": 25,
+        "textureMedium": 10,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "rough one-color fill, not clean flat color",
+        "paint slips past the wobbly outline",
+        "single-color rough hand-filled wobbly drawing",
+        "one ink color fill spilling outside the loose outline",
+        "imperfect color registration outside the line",
+        "monochrome naive hand-drawn illustration with visible wobbly outline",
+        "rough uneven contour with one-color fill",
+        "wobbly outline-first naive drawing",
+        "loose hand-drawn contour",
+        "naive editorial illustration",
+        "imperfect hand-drawn wobbly lines",
+        "childlike uneven line quality",
+        "playful asymmetry",
+        "wonky anatomy",
+        "loose simplified human proportions",
+        "charming handmade feel",
+        "minimal shading"
+      ],
+      "negativeFragments": [
+        "multicolor fill palette",
+        "clean coloring perfectly inside the lines",
+        "polished vector fill",
+        "solid fill without visible outline",
+        "complementary pop color linework",
+        "photorealistic",
+        "clean corporate vector",
+        "glossy 3D render",
+        "realistic anatomy",
+        "highly polished illustration",
+        "cinematic lighting"
+      ],
+      "improvementRules": {
+        "tooClean": "Add: rough uneven contour lines, imperfect sketch marks, intentionally asymmetric face and hands.",
+        "tooRealistic": "Add: flat naive drawing, no realistic anatomy, no camera lens effects.",
+        "tooCorporate": "Remove: corporate vector, geometric precision. Add: handmade editorial zine illustration.",
+        "tooBusy": "Reduce background detail; keep one person, one cup, a few walking cues."
+      },
+      "styleDifferentiator": "単色のラフ塗り＋線あり。多色にせず、1色の塗りが線から少しはみ出す手描き感を主役にする。",
+      "promptFragmentsJa": [
+        "きれいなフラット色ではなく粗い単色塗りにする",
+        "線から塗りがはみ出す",
+        "単色のラフ塗りにする",
+        "塗りが線から少しはみ出す",
+        "多色塗りにしない",
+        "ゆるい主線を残す",
+        "白地と余白を残す",
+        "ゆるい手描き線を主役にする",
+        "塗りよりも輪郭の揺れを見せる"
+      ],
+      "negativeFragmentsJa": [
+        "多色で塗らない",
+        "線内にきれいに収めすぎない",
+        "主線なしのベタ塗りにしない",
+        "補色ポップな主線にしない",
+        "きれいすぎるベクター線にしない",
+        "立体レンダーにしない"
+      ],
+      "referenceGlobs": [
+        "ナイーブ／ワブリー手描き2.webp",
+        "ナイーブ／ワブリー手描き7.png"
+      ],
+      "styleFamilyJa": "手描き・ワブリー系",
+      "styleSort": 1
+    },
+    {
+      "id": "naive_wobbly_plain",
+      "labelJa": "ゆるい手描き線 1",
+      "visualFingerprint": {
+        "line": "wobbly hand-drawn outline is clearly visible and carries the character of the image",
+        "shape": "simple naive shapes with some single-color filled areas, balanced against large unfilled white paper areas",
+        "color": "one dominant fill color plus expansive off-white unpainted space, no multicolor palette",
+        "texture": "rough handmade fill with visible unpainted gaps, loose line-and-fill relationship, not clean vector",
+        "composition": "large white negative space and selective filled shapes create strong illustration contrast and rhythm",
+        "person": "simplified person with wobbly line character; selected clothing or props may be filled while many areas remain unpainted"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 25,
+        "shapeLanguage": 25,
+        "textureMedium": 10,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "large unpainted white areas create strong contrast",
+        "selective single-color filled areas, not fully filled",
+        "white negative space is a major part of the illustration",
+        "one-color fill used sparingly for visual emphasis",
+        "wobbly linework remains clearly visible around unfilled areas",
+        "wobbly outline-first naive drawing",
+        "loose hand-drawn contour",
+        "naive editorial illustration",
+        "imperfect hand-drawn wobbly lines",
+        "childlike uneven line quality",
+        "playful asymmetry",
+        "wonky anatomy",
+        "loose simplified human proportions",
+        "flat colors on an off-white background",
+        "charming handmade feel",
+        "minimal shading"
+      ],
+      "negativeFragments": [
+        "fully filled silhouette",
+        "heavy monochrome filling across most of the image",
+        "coloring every shape",
+        "dense filled poster look",
+        "mostly solid color coverage",
+        "many accent colors",
+        "thin outline-only drawing",
+        "clean corporate vector fills",
+        "no-fill line art",
+        "photorealistic",
+        "clean corporate vector",
+        "glossy 3D render",
+        "realistic anatomy",
+        "highly polished illustration",
+        "cinematic lighting"
+      ],
+      "improvementRules": {
+        "tooClean": "Add: rough uneven contour lines, imperfect sketch marks, intentionally asymmetric face and hands.",
+        "tooRealistic": "Add: flat naive drawing, no realistic anatomy, no camera lens effects.",
+        "tooCorporate": "Remove: corporate vector, geometric precision. Add: handmade editorial zine illustration.",
+        "tooBusy": "Reduce background detail; keep one person, one cup, a few walking cues."
+      },
+      "styleDifferentiator": "参照画像寄せ。白い塗りなし面を広く残し、単色塗りは一部の大きな面に絞ってメリハリを出す。",
+      "promptFragmentsJa": [
+        "白い塗りなし部分を広く残す",
+        "単色塗りは一部の面に絞る",
+        "余白と塗りの対比でメリハリを出す",
+        "全面を塗りつぶさない",
+        "ゆるい線が見える部分を多く残す",
+        "参照画像原本のゆるい手描き線を優先する",
+        "白地と線の揺れを残す",
+        "ゆるい手描き線を主役にする",
+        "白地と余白を残す",
+        "塗りよりも輪郭の揺れを見せる"
+      ],
+      "negativeFragmentsJa": [
+        "全体を塗りつぶさない",
+        "単色で全面を埋めない",
+        "ポスターのような密な塗りにしない",
+        "白地を潰さない",
+        "多色アクセントにしない",
+        "線だけの絵にしない",
+        "企業ベクターの整った面にしない",
+        "整った企業ベクターにしない",
+        "きれいすぎるベクター線にしない",
+        "立体レンダーにしない"
+      ],
+      "referenceGlobs": [
+        "ナイーブ／ワブリー手描き.webp"
+      ],
+      "styleFamilyJa": "手描き・ワブリー系",
+      "styleSort": 2
+    },
+    {
+      "id": "naive_wobbly_color",
+      "labelJa": "ゆるい手描き＋差し色",
+      "visualFingerprint": {
+        "line": "simple colored wobbly outlines, not black; few lines, reduced detail, warm muted complementary color",
+        "shape": "very simplified naive forms, low detail, playful asymmetry without many small parts",
+        "color": "limited warm palette, two or three colors at most plus off-white; small accent fills only",
+        "texture": "light hand-colored editorial drawing, sparse marks, loose handmade edges without dense decoration",
+        "composition": "airy warm pop composition with large white space; minimal colored linework and restrained accents",
+        "person": "simplified friendly figure with minimal face and few detail lines, colored contour is the key cue"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 25,
+        "shapeLanguage": 25,
+        "textureMedium": 10,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "limited two or three color palette only",
+        "reduced detail colored wobbly line drawing",
+        "sparse colored outlines, no black keyline",
+        "small warm accent fills only",
+        "large off-white empty space with minimal marks",
+        "simple low-detail naive hand-colored illustration",
+        "colored wobbly outlines instead of black outlines",
+        "warm pop complementary color linework",
+        "no black keyline, use colored contour lines",
+        "hand-colored accents remain secondary to wobbly linework",
+        "visible off-white gaps between loose color areas",
+        "naive editorial illustration",
+        "imperfect hand-drawn wobbly lines",
+        "childlike uneven line quality",
+        "loose simplified human proportions",
+        "charming handmade feel",
+        "minimal shading"
+      ],
+      "negativeFragments": [
+        "many-color palette",
+        "busy decorative details",
+        "dense line detail",
+        "many small accent fills",
+        "highly detailed clothing folds",
+        "fully colored scene",
+        "black outline keyline",
+        "solid no-outline fill style",
+        "cold neon palette",
+        "corporate vector palette",
+        "solid poster-like filled areas",
+        "fully blocked-in silhouette",
+        "monochrome outline-only look",
+        "photorealistic",
+        "clean corporate vector",
+        "glossy 3D render",
+        "realistic anatomy",
+        "highly polished illustration",
+        "cinematic lighting"
+      ],
+      "improvementRules": {
+        "tooClean": "Add: rough uneven contour lines, imperfect sketch marks, intentionally asymmetric face and hands.",
+        "tooRealistic": "Add: flat naive drawing, no realistic anatomy, no camera lens effects.",
+        "tooCorporate": "Remove: corporate vector, geometric precision. Add: handmade editorial zine illustration.",
+        "tooBusy": "Reduce background detail; keep one person, one cup, a few walking cues."
+      },
+      "styleDifferentiator": "参照画像寄せ。黒主線は使わず、少ない色数の色線と小さな差し色だけで、ディテールを減らして余白を残す。",
+      "promptFragmentsJa": [
+        "色数を2〜3色に絞る",
+        "ディテールを減らす",
+        "黒主線ではなく少ない色線で描く",
+        "差し色は小さく控えめにする",
+        "余白を広く残す",
+        "主線を黒にしない",
+        "補色に近い色の主線を使う",
+        "白地の抜けを残す",
+        "色は主役を補助する程度"
+      ],
+      "negativeFragmentsJa": [
+        "色数を増やさない",
+        "細かい装飾を増やさない",
+        "線情報を密にしない",
+        "小さな差し色を散らしすぎない",
+        "全面カラーにしない",
+        "黒い主線にしない",
+        "主線なしのベタ塗りにしない",
+        "冷たいネオン配色にしない",
+        "全面塗りつぶしにしない",
+        "ポスターのような大きな色面にしない",
+        "線だけのモノクロにしない"
+      ],
+      "referenceGlobs": [
+        "ナイーブ／ワブリー手描きカラー.webp"
+      ],
+      "styleFamilyJa": "手描き・ワブリー系",
+      "styleSort": 3
+    },
+    {
+      "id": "naive_wobbly_filled",
+      "labelJa": "ゆるい手描き＋ベタ塗り 1",
+      "visualFingerprint": {
+        "line": "no main outline; avoid black or colored contour lines except almost none",
+        "shape": "naive filled shapes define the figure; simple cutout-like silhouettes and imperfect proportions",
+        "color": "solid flat fills form the entire image, few simple colors, no outline-driven drawing",
+        "texture": "handmade flat fill feel, soft uneven edges, no polished vector precision",
+        "composition": "the subject is constructed from readable no-outline color blocks on a clean light background",
+        "person": "person reads through filled shapes, minimal facial detail, no enclosing contour line"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 25,
+        "shapeLanguage": 25,
+        "textureMedium": 10,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "no visible contour outline",
+        "silhouette edges are color-shape edges only",
+        "naive no-line flat fill illustration",
+        "no-outline naive filled-shape illustration",
+        "built entirely from flat filled color shapes",
+        "main contours are made by color blocks, not linework",
+        "solid fill composition with no keyline",
+        "simple handmade cutout-like flat shapes",
+        "filled naive color blocks dominate the figure",
+        "simple poster-like hand-filled areas",
+        "filled naive hand-drawn shapes",
+        "bold simple hand-colored areas",
+        "playful asymmetry",
+        "loose simplified human proportions",
+        "flat colors on an off-white background",
+        "charming handmade feel",
+        "minimal shading"
+      ],
+      "negativeFragments": [
+        "any enclosing outline",
+        "sketch contour line",
+        "line-and-fill mismatch",
+        "visible black outline",
+        "colored contour linework",
+        "wobbly outline-first drawing",
+        "thin editorial line art",
+        "mostly white line drawing",
+        "light accent-only coloring",
+        "thin outline-only editorial style",
+        "photorealistic",
+        "clean corporate vector",
+        "glossy 3D render",
+        "realistic anatomy",
+        "highly polished illustration",
+        "cinematic lighting"
+      ],
+      "improvementRules": {
+        "tooClean": "Add: rough uneven contour lines, imperfect sketch marks, intentionally asymmetric face and hands.",
+        "tooRealistic": "Add: flat naive drawing, no realistic anatomy, no camera lens effects.",
+        "tooCorporate": "Remove: corporate vector, geometric precision. Add: handmade editorial zine illustration.",
+        "tooBusy": "Reduce background detail; keep one person, one cup, a few walking cues."
+      },
+      "styleDifferentiator": "主線なしのベタ塗り構成。輪郭線で囲わず、単純な色面だけで人物や物を読ませる。",
+      "promptFragmentsJa": [
+        "主線を完全になくす",
+        "色面の端だけで輪郭を作る",
+        "線ではなくベタ塗りで構成する",
+        "主線なしで構成する",
+        "ベタ塗りの色面だけで読ませる",
+        "輪郭線で囲わない",
+        "単純な色面で人物や物を作る",
+        "手描き感のある不均一な端にする",
+        "単純な色面で人物や小物を作る",
+        "輪郭より塗り面を強く見せる"
+      ],
+      "negativeFragmentsJa": [
+        "囲み線を入れない",
+        "ラフな輪郭線を入れない",
+        "線からはみ出す塗りにはしない",
+        "黒い主線を入れない",
+        "色の輪郭線を主役にしない",
+        "線画主体にしない",
+        "細線アウトラインにしない",
+        "差し色だけで終わらせない",
+        "細線アウトラインだけにしない",
+        "企業向けの整いすぎたベクターにしない"
+      ],
+      "referenceGlobs": [
+        "ナイーブ／ワブリー手描き塗りつぶし.webp"
+      ],
+      "styleFamilyJa": "手描き・ワブリー系",
+      "styleSort": 4
+    },
+    {
+      "id": "naive_wobbly_filled_2",
+      "labelJa": "ゆるい手描き＋ベタ塗り 2",
+      "visualFingerprint": {
+        "line": "no main enclosing outline; sparse hand-drawn detail lines only inside or around selected parts",
+        "shape": "filled naive color blocks define the figure first, with small sketch details added second",
+        "color": "solid filled areas dominate, simple warm palette, line details remain secondary",
+        "texture": "hand-filled flat shapes plus a few loose drawn detail marks, handmade but not outline-driven",
+        "composition": "readable filled-shape person with selective detail strokes for face, folds, cup, or motion",
+        "person": "person is built from color masses; small hand-drawn details clarify expression and props"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 25,
+        "shapeLanguage": 25,
+        "textureMedium": 10,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "no enclosing contour outline",
+        "only a few small hand-drawn detail marks",
+        "detail lines for face cup folds or motion only",
+        "no main outline, filled shapes first with sparse hand-drawn detail lines",
+        "flat filled naive blocks plus a few loose sketch details",
+        "color masses define the silhouette, detail lines only in selected areas",
+        "hand-drawn details added on top of no-outline filled shapes",
+        "solid fill figure with small wobbly line accents",
+        "filled naive color blocks dominate the figure",
+        "simple poster-like hand-filled areas",
+        "filled naive hand-drawn shapes",
+        "bold simple hand-colored areas",
+        "naive editorial illustration",
+        "playful asymmetry",
+        "loose simplified human proportions",
+        "flat colors on an off-white background",
+        "charming handmade feel",
+        "minimal shading"
+      ],
+      "negativeFragments": [
+        "continuous contour outline",
+        "outline around the whole body",
+        "detail lines covering every shape",
+        "full enclosing outline",
+        "outline-first wobbly drawing",
+        "line art dominant style",
+        "detail-free pure flat vector",
+        "many tiny sketch lines everywhere",
+        "light accent-only coloring",
+        "mostly white line drawing",
+        "thin outline-only editorial style",
+        "photorealistic",
+        "clean corporate vector",
+        "glossy 3D render",
+        "realistic anatomy",
+        "highly polished illustration",
+        "cinematic lighting"
+      ],
+      "improvementRules": {
+        "tooClean": "Add: rough uneven contour lines, imperfect sketch marks, intentionally asymmetric face and hands.",
+        "tooRealistic": "Add: flat naive drawing, no realistic anatomy, no camera lens effects.",
+        "tooCorporate": "Remove: corporate vector, geometric precision. Add: handmade editorial zine illustration.",
+        "tooBusy": "Reduce background detail; keep one person, one cup, a few walking cues."
+      },
+      "styleDifferentiator": "主線なしのベタ塗りを土台に、一部だけ手描き線でディテールを足す。線は輪郭ではなく補助。",
+      "promptFragmentsJa": [
+        "囲み線は入れない",
+        "小さな手描きディテール線だけ足す",
+        "顔・カップ・服のしわ・動きだけ線で補う",
+        "主線なしのベタ塗りを土台にする",
+        "一部だけ手描き線でディテールを足す",
+        "線は輪郭ではなく補助にする",
+        "色面でシルエットを作る",
+        "顔や小物だけ線で補う",
+        "参照画像2の素朴な塗り面を優先する",
+        "ゆるい形とベタ塗りを両立する",
+        "単純な色面で人物や小物を作る",
+        "輪郭より塗り面を強く見せる"
+      ],
+      "negativeFragmentsJa": [
+        "全身を線で囲まない",
+        "全体の輪郭線を入れない",
+        "全パーツに線を入れすぎない",
+        "全体を輪郭線で囲まない",
+        "線画主体にしない",
+        "完全に線なしで無表情にしない",
+        "細かい線を全体に増やしすぎない",
+        "差し色だけで終わらせない",
+        "細線アウトラインだけにしない",
+        "企業向けの整いすぎたベクターにしない"
+      ],
+      "referenceGlobs": [
+        "ナイーブ／ワブリー手描き塗りつぶし2.png"
+      ],
+      "styleFamilyJa": "手描き・ワブリー系",
+      "styleSort": 5
+    },
+    {
+      "id": "grain_flat",
+      "labelJa": "ざらっとしたフラット",
+      "visualFingerprint": {
+        "line": "clean simple contours with restrained linework",
+        "shape": "flat simplified shapes, readable silhouettes, low to medium detail",
+        "color": "muted palette with soft contrast, occasional strong blue or warm accent",
+        "texture": "visible paper grain, subtle noisy vector texture, matte surface",
+        "composition": "clear focal object, generous negative space, calm editorial layout",
+        "person": "simplified character, minimal facial detail, accessible SaaS/editorial tone"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 10,
+        "shapeLanguage": 20,
+        "textureMedium": 25,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "textured flat illustration",
+        "visible paper grain and subtle noise overlay across every shape",
+        "matte printed surface",
+        "simplified readable shapes",
+        "muted soft color palette",
+        "cream background",
+        "minimal facial features",
+        "soft editorial SaaS-style composition"
+      ],
+      "negativeFragments": [
+        "photorealistic",
+        "glossy 3D",
+        "heavy realistic shadows",
+        "complex painterly rendering",
+        "oversaturated neon palette",
+        "busy detailed background"
+      ],
+      "improvementRules": {
+        "grainWeak": "Add: visible paper grain across flat color areas, subtle print noise, matte finish.",
+        "tooDetailed": "Add: simplified silhouettes, fewer folds, fewer background elements.",
+        "tooFlatNoTexture": "Increase texture words; add grain to both figure and background.",
+        "tooDark": "Use light off-white or pale tinted background and restrained contrast."
+      },
+      "styleDifferentiator": "フラットな形に紙・インクの粒状感を乗せる分類。線の揺れや版画の彫り跡ではなく、面のざらつきで見せる。",
+      "promptFragmentsJa": [
+        "フラットな形に細かい粒状テクスチャを入れる",
+        "紙に印刷したようなざらつき",
+        "シンプルな面構成"
+      ],
+      "negativeFragmentsJa": [
+        "つるつるのベクターにしない",
+        "木版の硬い彫り線にしない",
+        "手描き線を主役にしない"
+      ],
+      "referenceGlobs": [
+        "グレイン入りフラット2.webp",
+        "グレイン入りフラット3.webp",
+        "グレイン入りフラット4.webp",
+        "グレイン入りフラット6.png"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 6
+    },
+    {
+      "id": "grain_flat_5",
+      "labelJa": "ざらっとしたフラット 5",
+      "visualFingerprint": {
+        "line": "clean simple contours with restrained linework",
+        "shape": "flat simplified shapes, readable silhouettes, low to medium detail",
+        "color": "muted palette with soft contrast, occasional strong blue or warm accent",
+        "texture": "visible paper grain, subtle noisy vector texture, matte surface",
+        "composition": "clear focal object, generous negative space, calm editorial layout",
+        "person": "simplified character, minimal facial detail, accessible SaaS/editorial tone"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 10,
+        "shapeLanguage": 20,
+        "textureMedium": 25,
+        "composition": 15,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "textured flat illustration",
+        "visible paper grain and subtle noise overlay across every shape",
+        "matte printed surface",
+        "simplified readable shapes",
+        "muted soft color palette",
+        "cream background",
+        "minimal facial features",
+        "soft editorial SaaS-style composition"
+      ],
+      "negativeFragments": [
+        "photorealistic",
+        "glossy 3D",
+        "heavy realistic shadows",
+        "complex painterly rendering",
+        "oversaturated neon palette",
+        "busy detailed background"
+      ],
+      "improvementRules": {
+        "grainWeak": "Add: visible paper grain across flat color areas, subtle print noise, matte finish.",
+        "tooDetailed": "Add: simplified silhouettes, fewer folds, fewer background elements.",
+        "tooFlatNoTexture": "Increase texture words; add grain to both figure and background.",
+        "tooDark": "Use light off-white or pale tinted background and restrained contrast."
+      },
+      "styleDifferentiator": "参照5専用。フラットな形に紙・インクの粒状感を強く乗せる。",
+      "promptFragmentsJa": [
+        "参照画像5の粒状テクスチャを優先する",
+        "ざらっとした紙面感を強く出す",
+        "フラットな形に細かい粒状テクスチャを入れる",
+        "紙に印刷したようなざらつき",
+        "シンプルな面構成"
+      ],
+      "negativeFragmentsJa": [
+        "つるつるのベクターにしない",
+        "手描き線を主役にしない",
+        "木版の硬い彫り線にしない"
+      ],
+      "referenceGlobs": [
+        "グレイン入りフラット5.webp"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 7
+    },
+    {
+      "id": "print_relief_lino",
+      "labelJa": "リソ／リノカット風版画",
+      "referenceGlob": "印刷・版画（リソ／リノカット／木版）[0-9.]*",
+      "visualFingerprint": {
+        "line": "bold carved marks, ink-like edges, rough printed contours",
+        "shape": "poster-like flat blocks, cutout silhouettes, simplified high-contrast forms",
+        "color": "limited spot-color palette, black plus red/pink/yellow/teal, off-white paper",
+        "texture": "risograph grain, linocut or woodblock texture, ink misregistration; 標準のリソ/リノカット。少色・版ズレ・インク粒子のバランス型。木版ほど黒い彫り跡に寄せない。",
+        "composition": "strong graphic layout, print poster energy, deliberate color separation",
+        "person": "reduced to bold readable shapes, expressive silhouette rather than detailed face"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 15,
+        "shapeLanguage": 15,
+        "textureMedium": 30,
+        "composition": 10,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "balanced riso and linocut cues",
+        "spot colors with slight registration offset",
+        "print texture without heavy woodcut blackness",
+        "classic risograph linocut relief-print style",
+        "limited spot colors and carved ink texture",
+        "risograph-inspired print illustration",
+        "linocut and woodblock print influence",
+        "limited 2-3 color spot-color palette",
+        "bold carved shapes",
+        "bold separated ink layers",
+        "rough ink texture",
+        "slight ink misregistration",
+        "visible halftone dots and ink grain",
+        "off-white paper background",
+        "poster-like composition"
+      ],
+      "negativeFragments": [
+        "dominant black woodcut gouges",
+        "large gradient ink fields",
+        "soft grain-only flat illustration",
+        "smooth digital gradient",
+        "photorealistic",
+        "glossy 3D",
+        "soft airbrush",
+        "full-color realistic rendering",
+        "thin delicate line art"
+      ],
+      "improvementRules": {
+        "tooSmooth": "Add: rough ink edges, visible print texture, imperfect registration.",
+        "tooManyColors": "Limit to 2-4 spot colors plus paper and black.",
+        "tooDelicate": "Use bold carved shapes and high contrast instead of thin outlines.",
+        "tooDigital": "Add: risograph overprint, halftone grain, handmade poster print."
+      },
+      "styleDifferentiator": "版ズレ・少色・インク粒子のバランス型。木版の黒い彫り跡だけに寄せず、印刷物らしいズレと質感を出す。",
+      "promptFragmentsJa": [
+        "少色のリソグラフ／リノカット風",
+        "少し版ズレした印刷感",
+        "インク粒子と紙の質感"
+      ],
+      "negativeFragmentsJa": [
+        "木版の黒い彫り跡だけに寄せない",
+        "滑らかなグラデーションを主役にしない",
+        "クリーンなベクターにしない"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 8
+    },
+    {
+      "id": "print_relief_gradient",
+      "labelJa": "グラデーション版画",
+      "referenceGlob": "印刷・版画（リソ／リノカット／木版）グラデーション*",
+      "visualFingerprint": {
+        "line": "bold carved marks, ink-like edges, rough printed contours",
+        "shape": "poster-like flat blocks, cutout silhouettes, simplified high-contrast forms",
+        "color": "limited print palette with visible gradient/overprint fields",
+        "texture": "risograph grain, linocut or woodblock texture, ink misregistration; 版画系の中でも、面の中に見えるグラデーション/オーバープリントが主役。硬い木版線より色の重なりを優先。",
+        "composition": "strong graphic layout, print poster energy, deliberate color separation",
+        "person": "reduced to bold readable shapes, expressive silhouette rather than detailed face"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 15,
+        "shapeLanguage": 15,
+        "textureMedium": 30,
+        "composition": 10,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "visible gradient ink fields are the main signature",
+        "soft riso overprint gradients inside print shapes",
+        "color transitions within limited spot-color print",
+        "printmaking with visible gradient ink fields",
+        "riso gradient overprint",
+        "risograph-inspired print illustration",
+        "linocut and woodblock print influence",
+        "limited 2-3 color spot-color palette",
+        "bold carved shapes",
+        "bold separated ink layers",
+        "rough ink texture",
+        "slight ink misregistration",
+        "visible halftone dots and ink grain",
+        "off-white paper background",
+        "poster-like composition"
+      ],
+      "negativeFragments": [
+        "flat single-tone ink blocks",
+        "dominant black woodcut gouges",
+        "flat single-tone vector fills",
+        "smooth digital gradient",
+        "photorealistic",
+        "glossy 3D",
+        "soft airbrush",
+        "full-color realistic rendering",
+        "thin delicate line art"
+      ],
+      "improvementRules": {
+        "tooSmooth": "Add: rough ink edges, visible print texture, imperfect registration.",
+        "tooManyColors": "Limit to 2-4 spot colors plus paper and black.",
+        "tooDelicate": "Use bold carved shapes and high contrast instead of thin outlines.",
+        "tooDigital": "Add: risograph overprint, halftone grain, handmade poster print."
+      },
+      "styleDifferentiator": "版画系の中でも色の重なりとグラデーションが主役。硬い彫り線より、刷り重ねた面の変化を見せる。",
+      "promptFragmentsJa": [
+        "版画風の色面にグラデーションを入れる",
+        "オーバープリントの色の重なり",
+        "刷りムラのある柔らかい階調"
+      ],
+      "negativeFragmentsJa": [
+        "黒い彫り跡を主役にしない",
+        "単色木版にしない",
+        "写真風の滑らかな陰影にしない"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 9
+    },
+    {
+      "id": "woodcut_print",
+      "labelJa": "木版風・彫り跡強め 1",
+      "visualFingerprint": {
+        "line": "bold carved black marks and rough relief-print edges",
+        "shape": "poster-like flat blocks, cutout silhouettes, simplified high-contrast forms",
+        "color": "limited spot-color palette, black plus red/pink/yellow/teal, off-white paper",
+        "texture": "woodcut or linocut ink texture, visible handmade print process; リソ風の版ズレやグラデーションではなく、黒い彫り跡・木版/リノカットの硬い削り跡が主役。",
+        "composition": "strong graphic layout, print poster energy, deliberate color separation",
+        "person": "reduced to bold readable shapes, expressive silhouette rather than detailed face"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 15,
+        "shapeLanguage": 15,
+        "textureMedium": 30,
+        "composition": 10,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "black carved gouge marks are the dominant feature",
+        "woodcut-like high contrast cuts",
+        "hard relief-print cuts rather than riso softness",
+        "bold handmade woodcut print",
+        "rough carved block-print marks",
+        "high-contrast inked shapes",
+        "risograph-inspired print illustration",
+        "linocut and woodblock print influence",
+        "limited 2-3 color spot-color palette",
+        "bold carved shapes",
+        "bold separated ink layers",
+        "rough ink texture",
+        "slight ink misregistration",
+        "visible halftone dots and ink grain",
+        "off-white paper background",
+        "poster-like composition"
+      ],
+      "negativeFragments": [
+        "risograph gradient overprint",
+        "soft riso color fields",
+        "subtle grain-only texture",
+        "soft SaaS grain flat",
+        "clean vector polish",
+        "smooth digital gradient",
+        "photorealistic",
+        "glossy 3D",
+        "soft airbrush",
+        "full-color realistic rendering",
+        "thin delicate line art"
+      ],
+      "improvementRules": {
+        "tooSmooth": "Add: rough ink edges, visible print texture, imperfect registration.",
+        "tooManyColors": "Limit to 2-4 spot colors plus paper and black.",
+        "tooDelicate": "Use bold carved shapes and high contrast instead of thin outlines.",
+        "tooDigital": "Add: risograph overprint, halftone grain, handmade poster print."
+      },
+      "styleDifferentiator": "参照1専用。黒い彫り線・削り跡を主役にし、硬い木版感を優先する。",
+      "promptFragmentsJa": [
+        "木版画のような硬い彫り跡",
+        "黒い削り線を強く出す",
+        "荒いインクと紙の白抜き"
+      ],
+      "negativeFragmentsJa": [
+        "リソ風の版ズレを主役にしない",
+        "柔らかいグラデーションを入れすぎない",
+        "フラットベクターにしない"
+      ],
+      "referenceGlobs": [
+        "版画.webp"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 10
+    },
+    {
+      "id": "woodcut_print_2",
+      "labelJa": "木版風・彫り跡強め 2",
+      "visualFingerprint": {
+        "line": "bold carved black marks and rough relief-print edges",
+        "shape": "poster-like flat blocks, cutout silhouettes, simplified high-contrast forms",
+        "color": "limited spot-color palette, black plus red/pink/yellow/teal, off-white paper",
+        "texture": "woodcut or linocut ink texture, visible handmade print process; リソ風の版ズレやグラデーションではなく、黒い彫り跡・木版/リノカットの硬い削り跡が主役。",
+        "composition": "strong graphic layout, print poster energy, deliberate color separation",
+        "person": "reduced to bold readable shapes, expressive silhouette rather than detailed face"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 15,
+        "shapeLanguage": 15,
+        "textureMedium": 30,
+        "composition": 10,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "black carved gouge marks are the dominant feature",
+        "woodcut-like high contrast cuts",
+        "hard relief-print cuts rather than riso softness",
+        "bold handmade woodcut print",
+        "rough carved block-print marks",
+        "high-contrast inked shapes",
+        "risograph-inspired print illustration",
+        "linocut and woodblock print influence",
+        "limited 2-3 color spot-color palette",
+        "bold carved shapes",
+        "bold separated ink layers",
+        "rough ink texture",
+        "slight ink misregistration",
+        "visible halftone dots and ink grain",
+        "off-white paper background",
+        "poster-like composition"
+      ],
+      "negativeFragments": [
+        "risograph gradient overprint",
+        "soft riso color fields",
+        "subtle grain-only texture",
+        "soft SaaS grain flat",
+        "clean vector polish",
+        "smooth digital gradient",
+        "photorealistic",
+        "glossy 3D",
+        "soft airbrush",
+        "full-color realistic rendering",
+        "thin delicate line art"
+      ],
+      "improvementRules": {
+        "tooSmooth": "Add: rough ink edges, visible print texture, imperfect registration.",
+        "tooManyColors": "Limit to 2-4 spot colors plus paper and black.",
+        "tooDelicate": "Use bold carved shapes and high contrast instead of thin outlines.",
+        "tooDigital": "Add: risograph overprint, halftone grain, handmade poster print."
+      },
+      "styleDifferentiator": "参照2専用。硬い彫り跡と少色の版画感を優先する。",
+      "promptFragmentsJa": [
+        "参照画像2の木版風の彫り跡を優先する",
+        "木版画のような硬い彫り跡",
+        "黒い削り線を強く出す",
+        "荒いインクと紙の白抜き"
+      ],
+      "negativeFragmentsJa": [
+        "リソ風の柔らかい色面に寄せすぎない",
+        "リソ風の版ズレを主役にしない",
+        "柔らかいグラデーションを入れすぎない",
+        "フラットベクターにしない"
+      ],
+      "referenceGlobs": [
+        "版画２.webp"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 11
+    },
+    {
+      "id": "woodcut_print_3",
+      "labelJa": "木版風・彫り跡強め 3",
+      "visualFingerprint": {
+        "line": "bold carved black marks and rough relief-print edges",
+        "shape": "poster-like flat blocks, cutout silhouettes, simplified high-contrast forms",
+        "color": "limited spot-color palette, black plus red/pink/yellow/teal, off-white paper",
+        "texture": "woodcut or linocut ink texture, visible handmade print process; リソ風の版ズレやグラデーションではなく、黒い彫り跡・木版/リノカットの硬い削り跡が主役。",
+        "composition": "strong graphic layout, print poster energy, deliberate color separation",
+        "person": "reduced to bold readable shapes, expressive silhouette rather than detailed face"
+      },
+      "styleScoringWeights": {
+        "palette": 20,
+        "lineEdge": 15,
+        "shapeLanguage": 15,
+        "textureMedium": 30,
+        "composition": 10,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "black carved gouge marks are the dominant feature",
+        "woodcut-like high contrast cuts",
+        "hard relief-print cuts rather than riso softness",
+        "bold handmade woodcut print",
+        "rough carved block-print marks",
+        "high-contrast inked shapes",
+        "risograph-inspired print illustration",
+        "linocut and woodblock print influence",
+        "limited 2-3 color spot-color palette",
+        "bold carved shapes",
+        "bold separated ink layers",
+        "rough ink texture",
+        "slight ink misregistration",
+        "visible halftone dots and ink grain",
+        "off-white paper background",
+        "poster-like composition"
+      ],
+      "negativeFragments": [
+        "risograph gradient overprint",
+        "soft riso color fields",
+        "subtle grain-only texture",
+        "soft SaaS grain flat",
+        "clean vector polish",
+        "smooth digital gradient",
+        "photorealistic",
+        "glossy 3D",
+        "soft airbrush",
+        "full-color realistic rendering",
+        "thin delicate line art"
+      ],
+      "improvementRules": {
+        "tooSmooth": "Add: rough ink edges, visible print texture, imperfect registration.",
+        "tooManyColors": "Limit to 2-4 spot colors plus paper and black.",
+        "tooDelicate": "Use bold carved shapes and high contrast instead of thin outlines.",
+        "tooDigital": "Add: risograph overprint, halftone grain, handmade poster print."
+      },
+      "styleDifferentiator": "参照3専用。黒い削り線と粗い印刷感を優先する。",
+      "promptFragmentsJa": [
+        "参照画像3の粗い版画感を優先する",
+        "木版画のような硬い彫り跡",
+        "黒い削り線を強く出す",
+        "荒いインクと紙の白抜き"
+      ],
+      "negativeFragmentsJa": [
+        "滑らかなグラデーションを主役にしない",
+        "リソ風の版ズレを主役にしない",
+        "柔らかいグラデーションを入れすぎない",
+        "フラットベクターにしない"
+      ],
+      "referenceGlobs": [
+        "版画３.webp"
+      ],
+      "styleFamilyJa": "グレイン・印刷質感系",
+      "styleSort": 12
+    },
+    {
+      "id": "editorial_outline_minimal",
+      "labelJa": "シンプル細線アウトライン",
+      "referenceGlob": "エディトリアル・アウトライン[0-9.]*",
+      "visualFingerprint": {
+        "line": "thin clean monoline outline, sparse and readable, not one-stroke gimmick",
+        "shape": "minimal simplified forms, little filled area, clear symbolic gestures",
+        "color": "mostly white or pale background with exactly one small accent color point",
+        "texture": "clean digital line art, no grain, no painterly texture",
+        "composition": "large whitespace, sparse person/cue layout, a single accent color creates focus",
+        "person": "minimal simplified figure, very few facial details, gesture-led communication"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 30,
+        "shapeLanguage": 20,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "one small accent color point",
+        "single tiny color accent in sparse monoline drawing",
+        "minimal thin outline with one restrained color fill",
+        "large white space and one focal color mark",
+        "clean readable line art with a small accent",
+        "minimal sparse outline, not necessarily one continuous stroke",
+        "clear readable monoline with generous whitespace",
+        "restrained editorial line drawing",
+        "minimal editorial outline illustration",
+        "thin sparse monoline and large whitespace",
+        "thin continuous black monoline drawing",
+        "large white negative space",
+        "only one or two small accent color fills",
+        "sparse continuous-line feeling",
+        "almost no solid fills",
+        "clean refined composition",
+        "refined magazine column style",
+        "minimal facial detail"
+      ],
+      "negativeFragments": [
+        "many accent colors",
+        "decorative color patches",
+        "large color fill area",
+        "color as the main feature",
+        "dense detail",
+        "decorative outline art density",
+        "strict one-stroke gimmick as main feature",
+        "art-heavy decorative outline",
+        "one-stroke doodle looseness",
+        "dense background",
+        "painterly texture",
+        "heavy grain",
+        "bold filled shapes",
+        "3D depth",
+        "photorealistic",
+        "many colors"
+      ],
+      "improvementRules": {
+        "tooFilled": "Remove filled color blocks; keep mostly thin outlines and one accent.",
+        "tooBusy": "Increase whitespace; reduce scene to person, cup, walking cue.",
+        "tooTextured": "Remove grain, paper texture, painterly rendering.",
+        "tooGeneric": "Add: editorial column illustration, refined monoline, sparse visual metaphor."
+      },
+      "styleDifferentiator": "必要最小限の細線に、小さなワンポイント色を1つだけ入れる。余白と線の読みやすさを保つ。",
+      "promptFragmentsJa": [
+        "小さなワンポイント色を1つだけ入れる",
+        "細線と余白を主役にする",
+        "色は小さな焦点として使う",
+        "読みやすいミニマル線画にする",
+        "必要最小限の細いアウトライン",
+        "余白を大きく取る",
+        "説明的で読みやすい線画"
+      ],
+      "negativeFragmentsJa": [
+        "色を複数散らさない",
+        "大きな色面にしない",
+        "装飾を増やしすぎない",
+        "色を主役にしない",
+        "装飾アートに寄せすぎない",
+        "一筆書きの制約を強くしない",
+        "色面を主役にしない"
+      ],
+      "styleFamilyJa": "細線アウトライン系",
+      "styleSort": 13
+    },
+    {
+      "id": "editorial_outline_singleline",
+      "labelJa": "一筆書き風ライン",
+      "referenceGlob": "エディトリアル・アウトライン一筆*",
+      "visualFingerprint": {
+        "line": "one-stroke continuous monoline, sparse and unbroken; 線が途切れず続く一筆感が主役。塗り・装飾・説明的背景を極力削る。",
+        "shape": "minimal gesture-led shapes with almost no filled area",
+        "color": "mostly white or very pale background, one small accent color",
+        "texture": "clean digital line art, almost no texture, no heavy grain",
+        "composition": "large whitespace, airy layout, editorial restraint",
+        "person": "gender-neutral simplified figure, minimal face, gesture-led communication"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 30,
+        "shapeLanguage": 20,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "strict single continuous line feeling",
+        "one unbroken monoline gesture",
+        "no decorative filled details",
+        "single-line continuous outline illustration",
+        "one-stroke monoline feeling",
+        "minimal unbroken line art",
+        "minimal editorial outline illustration",
+        "thin continuous black monoline drawing",
+        "large white negative space",
+        "only one or two small accent color fills",
+        "sparse continuous-line feeling",
+        "almost no solid fills",
+        "clean refined composition",
+        "refined magazine column style",
+        "minimal facial detail"
+      ],
+      "negativeFragments": [
+        "finished decorative outline art",
+        "multiple separate contour details",
+        "accent fills as the main feature",
+        "filled color blocks",
+        "heavy decorative art detail",
+        "dense background",
+        "painterly texture",
+        "heavy grain",
+        "bold filled shapes",
+        "3D depth",
+        "photorealistic",
+        "many colors"
+      ],
+      "improvementRules": {
+        "tooFilled": "Remove filled color blocks; keep mostly thin outlines and one accent.",
+        "tooBusy": "Increase whitespace; reduce scene to person, cup, walking cue.",
+        "tooTextured": "Remove grain, paper texture, painterly rendering.",
+        "tooGeneric": "Add: editorial column illustration, refined monoline, sparse visual metaphor."
+      },
+      "styleDifferentiator": "線がつながって見える一筆感が主役。塗り・模様・背景を削り、線の流れだけで形を読ませる。",
+      "promptFragmentsJa": [
+        "一筆書きのようにつながる線",
+        "塗りをほぼ使わない",
+        "線の流れで人物や物を表す"
+      ],
+      "negativeFragmentsJa": [
+        "装飾を増やさない",
+        "面の塗りで見せない",
+        "複雑な背景を入れない"
+      ],
+      "styleFamilyJa": "細線アウトライン系",
+      "styleSort": 14
+    },
+    {
+      "id": "editorial_outline_art",
+      "labelJa": "細線イラスト＋少し装飾",
+      "visualFingerprint": {
+        "line": "thin monoline outline with controlled geometric rhythm, clean black strokes",
+        "shape": "abstract geometric simplification, symbolic circles arcs rectangles and modular forms",
+        "color": "mostly white or pale background with restrained small accent fills",
+        "texture": "clean digital editorial line art, no grain, no painterly texture",
+        "composition": "artful geometric editorial composition, abstract shapes create the focal structure",
+        "person": "simplified person integrated with abstract geometric props, minimal facial detail"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 30,
+        "shapeLanguage": 20,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "abstract geometric editorial outline art",
+        "thin line illustration with symbolic geometric shapes",
+        "circles arcs rectangles and simple modular forms",
+        "more abstract than literal scene",
+        "composed geometric outline artwork",
+        "small restrained accent fills inside geometric motifs",
+        "finished editorial outline art, not one-stroke constraint",
+        "small refined accent fills and artful details",
+        "composed outline artwork with a clear editorial focal point",
+        "editorial outline art",
+        "thin outline with slightly more illustrative art presence",
+        "refined accent fills",
+        "minimal editorial outline illustration",
+        "thin continuous black monoline drawing",
+        "large white negative space",
+        "only one or two small accent color fills",
+        "sparse continuous-line feeling",
+        "almost no solid fills",
+        "clean refined composition",
+        "refined magazine column style",
+        "minimal facial detail"
+      ],
+      "negativeFragments": [
+        "literal detailed scene",
+        "organic decorative clutter",
+        "realistic anatomy detail",
+        "many props and background objects",
+        "dense filled vector scene",
+        "strict single unbroken line",
+        "bare minimum gesture only",
+        "almost empty one-stroke doodle",
+        "one-line-only continuous doodle",
+        "dense background",
+        "painterly texture",
+        "heavy grain",
+        "bold filled shapes",
+        "3D depth",
+        "photorealistic",
+        "many colors"
+      ],
+      "improvementRules": {
+        "tooFilled": "Remove filled color blocks; keep mostly thin outlines and one accent.",
+        "tooBusy": "Increase whitespace; reduce scene to person, cup, walking cue.",
+        "tooTextured": "Remove grain, paper texture, painterly rendering.",
+        "tooGeneric": "Add: editorial column illustration, refined monoline, sparse visual metaphor."
+      },
+      "styleDifferentiator": "細線を土台に、抽象度の高い幾何学形状・記号的な装飾で見せる。写実説明より構成感を優先する。",
+      "promptFragmentsJa": [
+        "抽象度を高くする",
+        "幾何学的な形で構成する",
+        "円・弧・四角などの記号的形状を使う",
+        "写実説明より構成感を優先する",
+        "細線に小さな装飾を足す",
+        "細いアウトラインに少し装飾を加える",
+        "小さな塗りや模様で完成感を出す",
+        "余白のある編集イラスト"
+      ],
+      "negativeFragmentsJa": [
+        "具体物を増やしすぎない",
+        "有機的な装飾過多にしない",
+        "写実的な人体にしない",
+        "背景小物を増やさない",
+        "一筆書きだけに制限しない",
+        "線だけのミニマル図にしない",
+        "全面ベタ塗りにしない"
+      ],
+      "referenceGlobs": [
+        "エディトリアル・アウトラインアート１.webp",
+        "エディトリアル・アウトラインアート2.webp",
+        "エディトリアル・アウトラインアート3.webp",
+        "エディトリアル・アウトラインアート4.webp",
+        "エディトリアル・アウトラインアート5.webp"
+      ],
+      "styleFamilyJa": "細線アウトライン系",
+      "styleSort": 15
+    },
+    {
+      "id": "editorial_outline_art_6",
+      "labelJa": "細線イラスト＋少し装飾 6",
+      "visualFingerprint": {
+        "line": "rough stronger black hand-drawn outline; preserve selected contour lines such as sleeves over the accent area while reducing unnecessary detail",
+        "shape": "strongly deformed simplified figure or subject; accent reads as a vivid overlay plane interacting with linework",
+        "color": "warm beige paper background, black solid fills, one vivid RGB-like accent color such as electric red, blue, green, or orange applied as a multiply-like overlay on meaningful clothing/object areas",
+        "texture": "flat vivid accent overlay appears printed or multiplied over rough linework; black lines partially remain visible",
+        "composition": "sparse editorial composition with mostly empty beige space; red-orange fill is a meaningful surface, not a background blob",
+        "person": "if a person appears, keep some sleeve/garment lines over the vivid accent while using black filled areas and deformed proportions"
+      },
+      "styleScoringWeights": {
+        "palette": 15,
+        "lineEdge": 30,
+        "shapeLanguage": 20,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "vivid RGB-like accent color",
+        "accent color looks like a multiply layer overlay",
+        "preserve some sleeve contour lines over the accent area",
+        "black linework remains partially visible through or around the accent fill",
+        "accent is a vivid overlay on meaningful clothing or object part",
+        "do not erase all garment linework inside the accent area",
+        "accent garment is expressed as a flat filled plane",
+        "reference 6 technique only, not a fixed pose or subject",
+        "do not force seated cafe patron pose",
+        "adapt the rough black line and red-orange garment accent to the requested subject",
+        "black solid fill and beige paper are style markers",
+        "subject and pose should follow the user request",
+        "closer to reference 6 rough caricature style",
+        "warm beige paper background",
+        "rough nervous black linework, not clean vector line",
+        "black solid filled pants or lower body",
+        "reference-6-inspired stronger black hand-drawn outline",
+        "bold black solid fill areas",
+        "graphic black fill plus single accent color",
+        "finished editorial outline art, not one-stroke constraint",
+        "composed outline artwork with a clear editorial focal point",
+        "large white negative space",
+        "clean refined composition",
+        "refined magazine column style",
+        "minimal facial detail"
+      ],
+      "negativeFragments": [
+        "muted red-orange only",
+        "pastel accent color",
+        "all sleeve lines removed",
+        "flat opaque accent that hides all linework",
+        "accent with no visible line interaction",
+        "line-detailed accent clothing",
+        "forced seated cafe patron pose",
+        "overriding the requested subject with cafe scene",
+        "pose-specific reference copying",
+        "orange pants as the main accent",
+        "polished smooth monoline",
+        "accent color used as background blob",
+        "large abstract background color patch",
+        "floating color shape unrelated to clothing",
+        "delicate thin monoline only",
+        "realistic proportions",
+        "many accent colors",
+        "soft pale minimal outline",
+        "fully colored vector scene",
+        "strict single unbroken line",
+        "bare minimum gesture only",
+        "almost empty one-stroke doodle",
+        "one-line-only continuous doodle",
+        "dense background",
+        "painterly texture",
+        "heavy grain",
+        "3D depth",
+        "photorealistic",
+        "many colors"
+      ],
+      "improvementRules": {
+        "tooFilled": "Remove filled color blocks; keep mostly thin outlines and one accent.",
+        "tooBusy": "Increase whitespace; reduce scene to person, cup, walking cue.",
+        "tooTextured": "Remove grain, paper texture, painterly rendering.",
+        "tooGeneric": "Add: editorial column illustration, refined monoline, sparse visual metaphor."
+      },
+      "styleDifferentiator": "参照6の技法寄せ。ベージュ地、強めでラフな黒線、黒ベタを使い、RGB系のビビッドな差し色を服などに乗算で重ねたように入れる。袖など一部の主線は残す。",
+      "promptFragmentsJa": [
+        "差し色はRGB系のビビッドカラーにする",
+        "差し色は乗算で重ねたように見せる",
+        "袖など一部の主線は残す",
+        "差し色の上にも黒線が一部見えるようにする",
+        "服や意味のあるパーツにビビッドな色面を重ねる",
+        "差し色部分は塗りつぶしの面で表現する",
+        "リファレンス6の技法だけを再現する",
+        "座りポーズやカフェ客に固定しない",
+        "主題とポーズはユーザー指定を優先する",
+        "強い黒線と黒ベタを技法として使う",
+        "リファレンス6のラフな似顔絵感に近づける",
+        "温かいベージュ地にする",
+        "きれいな線ではなく強めでラフな黒線にする",
+        "黒ベタはパンツや下半身に使う",
+        "赤橙の差し色は服や上着に入れる",
+        "黒ベタと単色アクセントを組み合わせる",
+        "リファレンス6のように線を強める",
+        "デフォルメを強める",
+        "黒の塗りベタを入れる",
+        "単色アクセントカラーを入れる",
+        "参照画像6の細線アウトライン感を優先する"
+      ],
+      "negativeFragmentsJa": [
+        "くすんだ赤橙だけにしない",
+        "パステルの差し色にしない",
+        "袖の線を全部消さない",
+        "差し色で線を完全に隠さない",
+        "差し色部分を線画主体にしない",
+        "座ったカフェ客に固定しない",
+        "主題をカフェシーンに置き換えない",
+        "ポーズまで参照画像通りにしない",
+        "オレンジのパンツを主役にしない",
+        "滑らかなきれいな線にしない",
+        "背景の色ベタにしない",
+        "服と無関係な色の塊にしない",
+        "繊細な細線だけにしない",
+        "写実的な比率にしない",
+        "アクセント色を複数にしない",
+        "全面カラーにしない",
+        "一筆書きだけに寄せすぎない",
+        "一筆書きだけに制限しない",
+        "線だけのミニマル図にしない"
+      ],
+      "referenceGlobs": [
+        "エディトリアル・アウトラインアート6.webp"
+      ],
+      "styleFamilyJa": "細線アウトライン系",
+      "styleSort": 16
+    },
+    {
+      "id": "flat_vector",
+      "labelJa": "すっきり企業向けベクター",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "geometric simplified forms, modular UI-like composition, high readability; 標準のコーポレートフラット。色数・塗り面・立体のどれかに特化せず、汎用的で整理されたベクター。",
+        "color": "controlled corporate palette with blue, orange, black, pale backgrounds",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "balanced commercial layout, clear hierarchy, presentation-ready",
+        "person": "simple friendly character, minimal face, business or lifestyle readability"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "general corporate flat vector balance",
+        "clean vector hierarchy without special two-tone or 3D constraint",
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "strict subtype gimmick dominating the image",
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      },
+      "styleDifferentiator": "汎用的で整理されたコーポレート系フラット。色数制限・大きな塗り面・立体感のどれかに特化しない。",
+      "promptFragmentsJa": [
+        "企業サイト向けの整ったフラットベクター",
+        "読みやすい形と余白",
+        "清潔で汎用的な配色"
+      ],
+      "negativeFragmentsJa": [
+        "手描きの揺れを出さない",
+        "版画テクスチャを入れない",
+        "立体アイソメにしすぎない"
+      ],
+      "referenceGlobs": [
+        "フラットベクター（コーポレート）1.webp",
+        "フラットベクター（コーポレート）6.png"
+      ],
+      "styleFamilyJa": "フラットベクター系",
+      "styleSort": 17
+    },
+    {
+      "id": "flat_vector_corporate_3",
+      "labelJa": "すっきり企業向けベクター 3",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "geometric simplified forms, modular UI-like composition, high readability; 標準のコーポレートフラット。色数・塗り面・立体のどれかに特化せず、汎用的で整理されたベクター。",
+        "color": "controlled corporate palette with blue, orange, black, pale backgrounds",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "balanced commercial layout, clear hierarchy, presentation-ready",
+        "person": "simple friendly character, minimal face, business or lifestyle readability"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "general corporate flat vector balance",
+        "clean vector hierarchy without special two-tone or 3D constraint",
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "strict subtype gimmick dominating the image",
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      },
+      "styleDifferentiator": "参照3専用。企業向けの整った形・配色・余白を優先する。",
+      "promptFragmentsJa": [
+        "参照画像3の企業向けベクター感を優先する",
+        "整った形と読みやすい余白で構成する",
+        "企業サイト向けの整ったフラットベクター",
+        "読みやすい形と余白",
+        "清潔で汎用的な配色"
+      ],
+      "negativeFragmentsJa": [
+        "手描きの揺れを出さない",
+        "版画テクスチャを入れない",
+        "立体アイソメにしすぎない"
+      ],
+      "referenceGlobs": [
+        "フラットベクター（コーポレート）3.webp"
+      ],
+      "styleFamilyJa": "フラットベクター系",
+      "styleSort": 18
+    },
+    {
+      "id": "flat_vector_twotone",
+      "labelJa": "2色だけのベクター",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "geometric simplified forms, modular UI-like composition, high readability; 色数制限が主役。2色＋白を厳守し、塗り面の量より配色制約で見せる。",
+        "color": "two-tone corporate palette with controlled contrast",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "balanced commercial layout, clear hierarchy, presentation-ready",
+        "person": "simple friendly character, minimal face, business or lifestyle readability"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "strict two-tone palette is the main signature",
+        "two colors plus white only",
+        "high contrast two-color vector design",
+        "two-tone corporate flat vector",
+        "strict two-color vector palette",
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "many corporate accent colors",
+        "full-color filled vector",
+        "many-color palette",
+        "grain texture",
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      },
+      "styleDifferentiator": "参照専用。2色＋白の配色制限を主役にし、少ない色で整理して見せる。",
+      "promptFragmentsJa": [
+        "2色と白だけで構成する",
+        "色数を絞ったフラットベクター",
+        "配色制限で見せる"
+      ],
+      "negativeFragmentsJa": [
+        "多色にしない",
+        "グラデーションを使わない",
+        "立体感を主役にしない"
+      ],
+      "referenceGlobs": [
+        "フラットベクター（コーポレート）ツートン.html.webp"
+      ],
+      "styleFamilyJa": "フラットベクター系",
+      "styleSort": 19
+    },
+    {
+      "id": "flat_vector_filled",
+      "labelJa": "大きな色面のベクター",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "large filled modular vector shapes, clean and readable; ベクター派生の中でも大きな塗り面が主役。ツートン縛りでも立体でもなく、均一な面で構成する。",
+        "color": "controlled corporate palette with blue, orange, black, pale backgrounds",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "balanced commercial layout, clear hierarchy, presentation-ready",
+        "person": "simple friendly character, minimal face, business or lifestyle readability"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "large filled vector color areas dominate",
+        "solid blocky vector silhouettes",
+        "minimal linework, shapes read through filled areas",
+        "filled corporate vector shapes",
+        "large smooth solid fills",
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "thin outline-driven vector",
+        "strict two-tone palette only",
+        "isometric or dimensional depth as main feature",
+        "outline-only line art",
+        "grain texture",
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      },
+      "styleDifferentiator": "参照専用。大きな均一色面を主役にし、2色縛りや立体感には寄せない。",
+      "promptFragmentsJa": [
+        "大きな均一色面で構成する",
+        "輪郭より塗り面を主役にする",
+        "影を抑えたフラットベクター"
+      ],
+      "negativeFragmentsJa": [
+        "2色だけに限定しない",
+        "立体アイソメにしない",
+        "手描きの不揃い線にしない"
+      ],
+      "referenceGlobs": [
+        "フラットベクター（コーポレート）塗りつぶし.webp"
+      ],
+      "styleFamilyJa": "フラットベクター系",
+      "styleSort": 20
+    },
+    {
+      "id": "flat_vector_3d",
+      "labelJa": "少し立体のベクター",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "clean vector geometry with slight dimensional depth; 平面ベクターに軽い奥行き・立体/アイソメ感を足す分類。塗りつぶしだけではなく面の向きが見える。",
+        "color": "controlled corporate palette with blue, orange, black, pale backgrounds",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "balanced commercial layout, clear hierarchy, presentation-ready",
+        "person": "simple friendly character, minimal face, business or lifestyle readability"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "slight dimensional or isometric vector construction",
+        "visible planar faces made from flat colors",
+        "simple depth without realistic 3D rendering",
+        "flat vector with slight dimensional/isometric feel",
+        "clean geometric dimensional shapes",
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "pure front-facing flat fill only",
+        "strictly flat poster vector",
+        "hand-drawn wobble",
+        "paper grain",
+        "rough print texture",
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      },
+      "styleDifferentiator": "参照専用。平面ベクターに軽い奥行きやアイソメ感を足す。",
+      "promptFragmentsJa": [
+        "フラットベクターに軽い奥行きを付ける",
+        "アイソメ風の面構成",
+        "柔らかい立体感"
+      ],
+      "negativeFragmentsJa": [
+        "完全な3Dレンダーにしない",
+        "平面のベタ塗りだけにしない",
+        "手描き線にしない"
+      ],
+      "referenceGlobs": [
+        "フラットベクター（コーポレート）立体.webp"
+      ],
+      "styleFamilyJa": "フラットベクター系",
+      "styleSort": 21
+    },
+    {
+      "id": "tech_illustration",
+      "labelJa": "テック図解イラスト",
+      "referenceGlob": "テックイラスト*",
+      "visualFingerprint": {
+        "line": "clean vector edges, optional thin support lines, crisp geometry",
+        "shape": "geometric simplified forms, modular UI-like composition, high readability",
+        "color": "controlled corporate palette with blue, orange, black, pale backgrounds",
+        "texture": "smooth vector surfaces, no grain, no painterly artifacts",
+        "composition": "technology-oriented SaaS illustration with UI-like hierarchy",
+        "person": "optional simplified tech/product character or object"
+      },
+      "styleScoringWeights": {
+        "palette": 25,
+        "lineEdge": 15,
+        "shapeLanguage": 25,
+        "textureMedium": 5,
+        "composition": 20,
+        "finishDiscipline": 10
+      },
+      "promptFragments": [
+        "tech product illustration",
+        "clean SaaS technology visual",
+        "precise UI-like geometric elements",
+        "clean flat vector illustration",
+        "corporate editorial style",
+        "precise vector shapes",
+        "crisp geometric shapes",
+        "smooth solid color fills",
+        "high readability",
+        "controlled blue and orange accent palette",
+        "simple friendly character",
+        "presentation-ready composition"
+      ],
+      "negativeFragments": [
+        "handmade wobble",
+        "printmaking texture",
+        "naive childlike figure",
+        "rough hand-drawn lines",
+        "paper grain",
+        "risograph texture",
+        "photorealistic",
+        "glossy 3D",
+        "messy painterly brushwork"
+      ],
+      "improvementRules": {
+        "tooHandmade": "Add: crisp vector edges, geometric construction, smooth flat fills.",
+        "tooTextured": "Remove grain and print texture; request clean scalable vector style.",
+        "tooPlain": "Add a few interface-like or urban walking support shapes while preserving clarity.",
+        "tooDecorative": "Prioritize business-friendly readability and simple hierarchy."
+      },
+      "styleDifferentiator": "プロダクト・UI・仕組みを説明するための図解寄りベクター。人物の雰囲気より、構造や情報の読みやすさを優先する。",
+      "promptFragmentsJa": [
+        "テックサービスを説明する図解イラスト",
+        "UIパネルやデータの流れを整理して見せる",
+        "クリーンなベクター表現"
+      ],
+      "negativeFragmentsJa": [
+        "手描き感を主役にしない",
+        "版画テクスチャを入れない",
+        "情緒的な装飾に寄せすぎない"
+      ],
+      "styleFamilyJa": "フラットベクター系",
+      "styleSort": 22
+    }
+  ]
+}
