@@ -6,14 +6,26 @@ from fastapi.staticfiles import StaticFiles
 
 from .runner import (
     compose_prompt,
+    compose_prompts_batch,
+    create_run,
+    delete_run,
+    export_run_artifacts,
     gate_report,
+    gate_summary,
     generation_slots,
+    get_run_meta,
+    intake_audit,
+    list_runs,
     load_style,
     load_styles,
     loop_status,
+    prepare_next_round,
     project_root,
+    refresh_evaluation,
     refresh_run,
+    review_workbench_data,
     set_review,
+    set_reviews_batch,
     style_preview_image,
     style_reference_images,
     sync_run,
@@ -22,10 +34,17 @@ from .runner import (
     write_prompt_pack,
 )
 from .schemas import (
+    BatchReviewRequest,
+    ComposeBatchRequest,
+    ComposeBatchResult,
     ComposeRequest,
     ComposeResult,
     CommandResult,
+    CreateRunRequest,
+    IntakeAuditRequest,
+    PrepareNextRoundRequest,
     ReviewRequest,
+    RunSummary,
     StyleDetail,
     StyleSummary,
     StyleUpdate,
@@ -111,6 +130,50 @@ def post_compose(req: ComposeRequest) -> ComposeResult:
     return ComposeResult(**result)
 
 
+@app.post("/api/prompts/compose-batch", response_model=ComposeBatchResult)
+def post_compose_batch(req: ComposeBatchRequest) -> ComposeBatchResult:
+    payload = compose_prompts_batch(req.model_dump())
+    return ComposeBatchResult(
+        styleIds=payload["styleIds"],
+        results=[ComposeResult(**row) for row in payload["results"]],
+    )
+
+
+@app.get("/api/runs", response_model=list[RunSummary])
+def get_runs() -> list[RunSummary]:
+    return [RunSummary(**row) for row in list_runs()]
+
+
+@app.post("/api/runs")
+def post_create_run(req: CreateRunRequest) -> dict:
+    try:
+        return create_run(req.model_dump())
+    except FileExistsError as exc:
+        raise HTTPException(status_code=409, detail=str(exc))
+    except ValueError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.get("/api/runs/{run_id}/meta")
+def get_run_meta_endpoint(run_id: str) -> dict:
+    meta = get_run_meta(run_id)
+    if meta is None:
+        raise HTTPException(status_code=404, detail=f"unknown run: {run_id}")
+    return meta
+
+
+@app.post("/api/runs/{run_id}/export")
+def post_export_run(run_id: str) -> dict:
+    if get_run_meta(run_id) is None and not (project_root() / "prompt_runs" / run_id).exists():
+        raise HTTPException(status_code=404, detail=f"unknown run: {run_id}")
+    try:
+        return export_run_artifacts(run_id)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 @app.get("/api/runs/{run_id}/status")
 def get_run_status(run_id: str) -> dict:
     try:
@@ -156,6 +219,64 @@ def get_gate_report(run_id: str) -> CommandResult:
     return CommandResult(**gate_report(run_id))
 
 
+@app.get("/api/runs/{run_id}/gate/summary")
+def get_gate_summary(run_id: str, refresh: bool = False) -> dict:
+    try:
+        return gate_summary(run_id, force=refresh)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.get("/api/runs/{run_id}/reviews/workbench")
+def get_review_workbench(run_id: str, refresh: bool = False) -> dict:
+    try:
+        return review_workbench_data(run_id, force=refresh)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.post("/api/runs/{run_id}/evaluation/refresh")
+def post_refresh_evaluation(run_id: str) -> dict:
+    try:
+        return refresh_evaluation(run_id)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.post("/api/runs/{run_id}/next-round")
+def post_prepare_next_round(run_id: str, req: PrepareNextRoundRequest) -> dict:
+    try:
+        if req.overwrite and req.targetRun.strip():
+            target = req.targetRun.strip()
+            if (project_root() / "prompt_runs" / target).exists():
+                delete_run(target)
+            return prepare_next_round(run_id, target, req.variants)
+        return prepare_next_round(
+            run_id,
+            req.targetRun.strip() or None,
+            req.variants,
+        )
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
+@app.delete("/api/runs/{run_id}")
+def delete_run_endpoint(run_id: str) -> dict:
+    try:
+        return delete_run(run_id)
+    except FileNotFoundError as exc:
+        raise HTTPException(status_code=404, detail=str(exc))
+
+
+@app.post("/api/runs/{run_id}/intake-audit")
+def post_intake_audit(run_id: str, req: IntakeAuditRequest) -> dict:
+    source_dir = req.sourceDir.strip() or None
+    try:
+        return intake_audit(run_id, source_dir)
+    except RuntimeError as exc:
+        raise HTTPException(status_code=500, detail=str(exc))
+
+
 @app.post("/api/runs/{run_id}/sync")
 def post_sync_run(run_id: str, req: SyncRequest) -> dict:
     source_dir = req.sourceDir.strip() or None
@@ -170,15 +291,29 @@ def post_review(run_id: str, req: ReviewRequest) -> CommandResult:
         raise HTTPException(status_code=400, detail=str(exc))
 
 
+@app.post("/api/runs/{run_id}/reviews/batch")
+def post_reviews_batch(run_id: str, req: BatchReviewRequest) -> dict:
+    try:
+        return set_reviews_batch(
+            run_id,
+            [item.model_dump() for item in req.reviews],
+        )
+    except RuntimeError as exc:
+        raise HTTPException(status_code=400, detail=str(exc))
+
+
 generated_dir = project_root() / "generated"
 generated_dir.mkdir(exist_ok=True)
 REPORTS_DIR = project_root() / "reports"
 REPORTS_DIR.mkdir(exist_ok=True)
 FRONTEND_DIST_DIR = project_root() / "app" / "frontend" / "dist"
+PROMPT_RUNS_DIR = project_root() / "prompt_runs"
+PROMPT_RUNS_DIR.mkdir(exist_ok=True)
 
 app.mount("/references", StaticFiles(directory=str(project_root())), name="references")
 app.mount("/generated", StaticFiles(directory=str(generated_dir)), name="generated")
 app.mount("/reports", StaticFiles(directory=str(REPORTS_DIR)), name="reports")
+app.mount("/prompt_runs", StaticFiles(directory=str(PROMPT_RUNS_DIR)), name="prompt_runs")
 
 if FRONTEND_DIST_DIR.exists():
     app.mount("/", StaticFiles(directory=str(FRONTEND_DIST_DIR), html=True), name="frontend")

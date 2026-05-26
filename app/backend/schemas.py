@@ -54,6 +54,18 @@ class ComposeRequest(BaseModel):
     useCase: str = ""
     format: str = ""
     tone: str = ""
+    strength: int = Field(default=70, ge=1, le=100)
+
+
+class ComposeBatchRequest(BaseModel):
+    subject: str
+    requiredElements: list[str] = Field(default_factory=list)
+    avoidElements: list[str] = Field(default_factory=list)
+    useCase: str = ""
+    format: str = ""
+    tone: str = ""
+    strength: int = Field(default=70, ge=1, le=100)
+    styleIds: list[str] = Field(default_factory=list)
 
 
 class VariantPrompt(BaseModel):
@@ -67,7 +79,13 @@ class ComposeResult(BaseModel):
     styleId: str
     positive: str
     negative: str
+    strength: int = 70
     variants: list[VariantPrompt]
+
+
+class ComposeBatchResult(BaseModel):
+    styleIds: list[str] = Field(default_factory=list)
+    results: list[ComposeResult] = Field(default_factory=list)
 
 
 class CommandResult(BaseModel):
@@ -87,5 +105,39 @@ class ReviewRequest(BaseModel):
     override: Optional[float] = None
 
 
+class BatchReviewRequest(BaseModel):
+    reviews: list[ReviewRequest] = Field(min_length=1)
+
+
 class SyncRequest(BaseModel):
     sourceDir: str = ""
+
+
+class CreateRunRequest(BaseModel):
+    runId: str = ""
+    subject: str
+    requiredElements: list[str] = Field(default_factory=list)
+    avoidElements: list[str] = Field(default_factory=list)
+    useCase: str = ""
+    format: str = ""
+    tone: str = ""
+    strength: int = Field(default=70, ge=1, le=100)
+    overwrite: bool = False
+
+
+class RunSummary(BaseModel):
+    runId: str
+    subject: str = ""
+    createdAt: str = ""
+    hasPlan: bool = False
+    updatedAt: str = ""
+
+
+class IntakeAuditRequest(BaseModel):
+    sourceDir: str = ""
+
+
+class PrepareNextRoundRequest(BaseModel):
+    targetRun: str = ""
+    variants: int = 3
+    overwrite: bool = False

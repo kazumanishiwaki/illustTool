@@ -9,6 +9,7 @@ import shlex
 import shutil
 import statistics
 import sys
+import time
 import unicodedata
 from pathlib import Path
 from PIL import Image, ImageDraw, ImageFont, ImageOps
@@ -46,6 +47,202 @@ def write_text_atomic(path, text, encoding="utf-8"):
 
 def load_data():
     return json.loads(DATA_PATH.read_text(encoding="utf-8"))
+
+
+def load_run_meta(run_id):
+    meta_path = ROOT / "prompt_runs" / run_id / "run_meta.json"
+    if not meta_path.exists():
+        return None
+    return json.loads(meta_path.read_text(encoding="utf-8"))
+
+
+def load_run_theme(data, run_id):
+    meta = load_run_meta(run_id)
+    if meta is None:
+        plan_path = ROOT / "prompt_runs" / run_id / "generation_plan.json"
+        if plan_path.exists():
+            plan = json.loads(plan_path.read_text(encoding="utf-8"))
+            theme = plan.get("theme")
+            if theme:
+                return theme
+        return data["theme"]
+    return {
+        "id": meta.get("runId", run_id),
+        "ja": meta.get("subject", ""),
+        "basePromptEn": meta.get("basePromptEn", meta.get("subject", "")),
+        "mustContain": meta.get("requiredElements", []),
+        "mustAvoid": meta.get("avoidElements", []),
+    }
+
+
+def theme_subject_lock_line(theme):
+    theme = theme or {}
+    subject = (theme.get("ja") or "").strip()
+    must = [str(item).strip() for item in theme.get("mustContain", []) if str(item).strip()]
+    avoid = [str(item).strip() for item in theme.get("mustAvoid", []) if str(item).strip()]
+    if subject and must:
+        line = f"Keep the fixed subject explicit: {subject}; required elements: {', '.join(must)}."
+    elif subject:
+        line = f"Keep the fixed subject explicit: {subject}."
+    elif must:
+        line = f"Keep required elements explicit: {', '.join(must)}."
+    else:
+        line = "Keep the subject lock at the start of the prompt."
+    if avoid:
+        line += f" Avoid: {', '.join(avoid)}."
+    return line
+
+
+def theme_subject_clarity_focus(theme):
+    theme = theme or {}
+    bits = []
+    subject = (theme.get("ja") or "").strip()
+    if subject:
+        bits.append(subject)
+    bits.extend(str(item).strip() for item in theme.get("mustContain", []) if str(item).strip())
+    if bits:
+        return (
+            "subject clarity variant: make "
+            f"{', '.join(bits)} immediately readable at thumbnail size"
+        )
+    return (
+        "subject clarity variant: make the main subject, focal pose, and required props "
+        "immediately readable at thumbnail size"
+    )
+
+
+def theme_subject_adherence_messages(theme):
+    theme = theme or {}
+    messages = [
+        "The fixed subject must be obvious before judging style quality.",
+    ]
+    must = [str(item).strip() for item in theme.get("mustContain", []) if str(item).strip()]
+    if must:
+        messages.extend(f"Must contain: {item}" for item in must)
+    subject = (theme.get("ja") or "").strip()
+    avoid = [str(item).strip() for item in theme.get("mustAvoid", []) if str(item).strip()]
+    if subject:
+        messages.append(f"Reject or cap if the image does not clearly depict: {subject}.")
+    if avoid:
+        messages.append(f"Reject or cap if forbidden elements appear: {', '.join(avoid)}.")
+    if not subject and not must:
+        messages.append("Reject or cap if required subject elements are missing or ambiguous.")
+    return messages
+
+
+def theme_composition_messages(theme, fingerprint):
+    subject = (theme or {}).get("ja", "").strip()
+    if subject:
+        return [
+            f"Composition: {fingerprint['composition']}",
+            f"The generated image should preserve reference density and whitespace while keeping {subject} readable.",
+        ]
+    return [
+        f"Composition: {fingerprint['composition']}",
+        "The generated image should preserve reference density and whitespace while keeping the main subject readable.",
+    ]
+
+
+def theme_production_usefulness_messages(theme):
+    theme = theme or {}
+    subject = (theme.get("ja") or "").strip()
+    must = [str(item).strip() for item in theme.get("mustContain", []) if str(item).strip()]
+    readable = ", ".join([part for part in [subject, *must] if part])
+    if readable:
+        return [
+            "The image should be usable as a finished illustration candidate, not only as a style test.",
+            f"{readable} should remain legible at thumbnail size.",
+        ]
+    return [
+        "The image should be usable as a finished illustration candidate, not only as a style test.",
+        "The main subject and silhouette should remain legible at thumbnail size.",
+    ]
+
+
+def theme_manual_subject_hint(theme):
+    theme = theme or {}
+    subject = (theme.get("ja") or "").strip()
+    must = [str(item).strip() for item in theme.get("mustContain", []) if str(item).strip()]
+    if subject and must:
+        return (
+            f"Subject: move the subject lock earlier and make {subject} with "
+            f"{', '.join(must)} unambiguous."
+        )
+    if subject:
+        return f"Subject: move the subject lock earlier and make {subject} unambiguous."
+    if must:
+        return f"Subject: move the subject lock earlier and make {', '.join(must)} unambiguous."
+    return "Subject: move the subject lock earlier and make the required elements unambiguous."
+
+
+LEGACY_STYLE_ALIASES = {
+    "naive_wobbly": "naive_wobbly_line",
+    "print_relief": "print_relief_lino",
+    "editorial_outline": "editorial_outline_minimal",
+}
+
+
+def resolve_style_record(data, style_id, label_ja=""):
+    styles_by_id = {style["id"]: style for style in data["styles"]}
+    if style_id in styles_by_id:
+        return styles_by_id[style_id]
+    alias_id = LEGACY_STYLE_ALIASES.get(style_id)
+    if alias_id and alias_id in styles_by_id:
+        resolved = dict(styles_by_id[alias_id])
+        resolved["id"] = style_id
+        if label_ja:
+            resolved["labelJa"] = label_ja
+        return resolved
+    return None
+
+
+def styles_for_run(data, run_id):
+    meta = load_run_meta(run_id)
+    allowed = None
+    if meta and meta.get("styleIds"):
+        allowed = set(meta["styleIds"])
+    else:
+        plan_path = ROOT / "prompt_runs" / run_id / "generation_plan.json"
+        if plan_path.exists():
+            plan = json.loads(plan_path.read_text(encoding="utf-8"))
+            job_ids = [job["styleId"] for job in plan.get("jobs", []) if job.get("styleId")]
+            if job_ids:
+                allowed = set(job_ids)
+    if not allowed:
+        return data["styles"]
+
+    matched = [style for style in data["styles"] if style.get("id") in allowed]
+    if len(matched) == len(allowed):
+        return matched
+
+    plan_path = ROOT / "prompt_runs" / run_id / "generation_plan.json"
+    if not plan_path.exists():
+        return matched or data["styles"]
+    plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    legacy_rows = []
+    for job in plan.get("jobs", []):
+        style_id = job.get("styleId")
+        if style_id not in allowed:
+            continue
+        style = resolve_style_record(
+            data,
+            style_id,
+            job.get("labelJa", style_id),
+        )
+        if style is None:
+            style = {
+                "id": style_id,
+                "labelJa": job.get("labelJa", style_id),
+                "referenceGlob": "",
+                "referenceGlobs": [],
+                "promptFragments": [],
+                "negativeFragments": [],
+                "visualFingerprint": {},
+                "styleScoringWeights": {},
+                "improvementRules": {},
+            }
+        legacy_rows.append(style)
+    return legacy_rows or matched or data["styles"]
 
 
 def iter_reference_images(style):
@@ -435,7 +632,7 @@ def manual_template():
 
 def evaluate_run(data, run_id):
     run_rows = []
-    for style in data["styles"]:
+    for style in styles_for_run(data, run_id):
         images = generated_images_for_style(run_id, style["id"])
         style_row = {
             "styleId": style["id"],
@@ -462,7 +659,7 @@ def evaluate_run(data, run_id):
         run_rows.append(style_row)
     return {
         "runId": run_id,
-        "theme": data["theme"],
+        "theme": load_run_theme(data, run_id),
         "passScore": data["globalEvaluation"]["passScore"],
         "automaticMetricWeight": data["globalEvaluation"]["automaticMetricWeight"],
         "manualRubricWeight": data["globalEvaluation"]["manualRubricWeight"],
@@ -472,11 +669,39 @@ def evaluate_run(data, run_id):
     }
 
 
-def write_run_report(data, run_id):
+def report_is_stale(data, run_id, out_json):
+    if not out_json.exists():
+        return True
+    report_mtime = out_json.stat().st_mtime
+    for style in styles_for_run(data, run_id):
+        for image_path in generated_images_for_style(run_id, style["id"]):
+            if image_path.stat().st_mtime > report_mtime:
+                return True
+    plan_path = ROOT / "prompt_runs" / run_id / "generation_plan.json"
+    if plan_path.exists() and plan_path.stat().st_mtime > report_mtime:
+        return True
+    return False
+
+
+def write_run_report(data, run_id, force=False):
+    out_json, out_html = report_paths(run_id)
+    out_json.parent.mkdir(parents=True, exist_ok=True)
+    if not force and out_json.exists() and not report_is_stale(data, run_id, out_json):
+        try:
+            report = json.loads(out_json.read_text(encoding="utf-8"))
+        except json.JSONDecodeError:
+            report = None
+        if report is not None:
+            if "summary" not in report:
+                compute_final_scores(report)
+                report["summary"] = summarize_report(report)
+                write_text_atomic(out_json, json.dumps(report, ensure_ascii=False, indent=2))
+            if not out_html.exists():
+                write_text_atomic(out_html, render_run_html(report))
+            return out_json, out_html
+
     report = evaluate_run(data, run_id)
-    out_json = ROOT / "reports" / f"{run_id}_evaluation.json"
-    out_html = ROOT / "reports" / f"{run_id}_review.html"
-    out_json.parent.mkdir(exist_ok=True)
+    report["theme"] = load_run_theme(data, run_id)
     preserve_manual_reviews(report, out_json)
     compute_final_scores(report)
     report["summary"] = summarize_report(report)
@@ -736,21 +961,18 @@ def render_run_html(report):
 """
 
 
-def write_prompt_pack(data, out_dir, extra_constraints=None, source_run=None):
-    out_dir.mkdir(parents=True, exist_ok=True)
-    theme = data["theme"]
-    for style in data["styles"]:
-        prompt = ", ".join(dedupe([theme["basePromptEn"], *style["promptFragments"]]))
-        negative = ", ".join(dedupe([*theme["mustAvoid"], *style["negativeFragments"]]))
-        constraints = extra_constraints.get(style["id"], []) if extra_constraints else []
-        constraints_block = ""
-        if constraints:
-            constraints_block = f"""
+def write_style_prompt_file(out_dir, style, style_id, theme, constraints=None, source_run=None):
+    prompt = ", ".join(dedupe([theme["basePromptEn"], *style["promptFragments"]]))
+    negative = ", ".join(dedupe([*theme["mustAvoid"], *style["negativeFragments"]]))
+    constraints = constraints or []
+    constraints_block = ""
+    if constraints:
+        constraints_block = f"""
 ## Round Improvement Constraints
 {chr(10).join(f"- {item}" for item in constraints)}
 """
-        source_block = f"\nSource run: `{source_run}`\n" if source_run else ""
-        body = f"""# {style["labelJa"]} / {style["id"]}
+    source_block = f"\nSource run: `{source_run}`\n" if source_run else ""
+    body = f"""# {style["labelJa"]} / {style_id}
 {source_block}
 
 ## Theme
@@ -766,21 +988,29 @@ def write_prompt_pack(data, out_dir, extra_constraints=None, source_run=None):
 {chr(10).join(f"- {item}" for item in theme["mustContain"])}
 
 ## Style Fingerprint
-- Line: {style["visualFingerprint"]["line"]}
-- Shape: {style["visualFingerprint"]["shape"]}
-- Color: {style["visualFingerprint"]["color"]}
-- Texture: {style["visualFingerprint"]["texture"]}
-- Composition: {style["visualFingerprint"]["composition"]}
-- Person: {style["visualFingerprint"]["person"]}
+- Line: {style["visualFingerprint"].get("line", "")}
+- Shape: {style["visualFingerprint"].get("shape", "")}
+- Color: {style["visualFingerprint"].get("color", "")}
+- Texture: {style["visualFingerprint"].get("texture", "")}
+- Composition: {style["visualFingerprint"].get("composition", "")}
+- Person: {style["visualFingerprint"].get("person", "")}
 
 ## Improvement Rules
-{chr(10).join(f"- {key}: {value}" for key, value in style["improvementRules"].items())}
+{chr(10).join(f"- {key}: {value}" for key, value in style.get("improvementRules", {}).items())}
 
 ## Style Scoring Weights
-{chr(10).join(f"- {key}: {value}" for key, value in style["styleScoringWeights"].items())}
+{chr(10).join(f"- {key}: {value}" for key, value in style.get("styleScoringWeights", {}).items())}
 {constraints_block}
 """
-        write_text_atomic(out_dir / f"{style['id']}.md", body)
+    write_text_atomic(out_dir / f"{style_id}.md", body)
+
+
+def write_prompt_pack(data, out_dir, extra_constraints=None, source_run=None):
+    out_dir.mkdir(parents=True, exist_ok=True)
+    theme = data["theme"]
+    for style in data["styles"]:
+        constraints = extra_constraints.get(style["id"], []) if extra_constraints else []
+        write_style_prompt_file(out_dir, style, style["id"], theme, constraints, source_run)
 
 
 def read_report(run_id):
@@ -1295,12 +1525,12 @@ def write_operator_checklist(data, run_id):
     return out_md, payload
 
 
-def improvement_constraints_for_style(style, style_report):
+def improvement_constraints_for_style(style, style_report, theme=None):
     best = best_image_for_style(style_report)
     if best is None:
         return [
             "No generated image was found for the previous run. Generate a first candidate with the base prompt before modifying the style.",
-            "Keep the fixed subject lock at the start of the prompt."
+            theme_subject_lock_line(theme),
         ]
     if best.get("passed"):
         return [
@@ -1311,7 +1541,7 @@ def improvement_constraints_for_style(style, style_report):
     constraints = [
         f"Previous best image: {best['path']}",
         f"Previous automatic score: {best['targetAutomaticScore']}/35; target style rank: {best['targetRank']}.",
-        "Keep the fixed subject explicit: full body walking pose, takeaway coffee cup clearly visible in one hand."
+        theme_subject_lock_line(theme),
     ]
     final_score = best.get("finalScore")
     if final_score is None:
@@ -1327,7 +1557,7 @@ def improvement_constraints_for_style(style, style_report):
         constraints.append(f"Pass gate failure to fix: {reason}.")
 
     constraints.extend(metric_constraints(best))
-    constraints.extend(manual_axis_constraints(style, best))
+    constraints.extend(manual_axis_constraints(style, best, theme=theme))
     constraints.extend(style["improvementRules"].values())
     return dedupe(constraints)
 
@@ -1351,12 +1581,12 @@ def metric_constraints(image):
     return out
 
 
-def manual_axis_constraints(style, image):
+def manual_axis_constraints(style, image, theme=None):
     manual = image.get("manualReview", {})
     axes = manual.get("axes", {})
     maxes = manual.get("axisMax", MANUAL_AXES)
     messages = {
-        "subjectAdherence": "Subject: move the subject lock earlier and make the coffee cup, walking pose, and outdoor setting unambiguous.",
+        "subjectAdherence": theme_manual_subject_hint(theme),
         "lineShapeLanguage": f"Line/shape: strengthen the style fingerprint line and shape rules for {style['labelJa']}.",
         "textureMediumVisual": f"Texture/medium: strengthen the material/process words for {style['labelJa']}.",
         "compositionIntent": f"Composition: match the reference density, whitespace, and layout hierarchy for {style['labelJa']}.",
@@ -1380,36 +1610,80 @@ def manual_axis_constraints(style, image):
 
 def write_next_round(data, source_run, target_run):
     report = read_report(source_run)
-    styles_by_id = {style["id"]: style for style in data["styles"]}
-    constraints = {}
-    for style_report in report["styles"]:
-        style = styles_by_id[style_report["styleId"]]
-        constraints[style["id"]] = improvement_constraints_for_style(style, style_report)
+    theme = load_run_theme(data, source_run)
     out_dir = ROOT / "prompt_runs" / target_run
-    write_prompt_pack(data, out_dir, constraints, source_run=source_run)
-    for style_id in styles_by_id:
+    out_dir.mkdir(parents=True, exist_ok=True)
+    style_ids = []
+    for style_report in report["styles"]:
+        style_id = style_report["styleId"]
+        style = resolve_style_record(
+            data,
+            style_id,
+            style_report.get("labelJa", style_id),
+        )
+        if style is None:
+            continue
+        style_ids.append(style_id)
+        constraints = improvement_constraints_for_style(style, style_report, theme=theme)
+        write_style_prompt_file(
+            out_dir,
+            style,
+            style_id,
+            theme,
+            constraints,
+            source_run=source_run,
+        )
         (ROOT / "generated" / target_run / style_id).mkdir(parents=True, exist_ok=True)
+
+    source_meta = load_run_meta(source_run)
+    if source_meta:
+        target_meta = dict(source_meta)
+    else:
+        target_meta = {
+            "subject": theme.get("ja", ""),
+            "requiredElements": list(theme.get("mustContain", [])),
+            "avoidElements": list(theme.get("mustAvoid", [])),
+            "useCase": "",
+            "format": "",
+            "tone": "",
+            "basePromptEn": theme.get("basePromptEn", theme.get("ja", "")),
+        }
+    target_meta.update({
+        "runId": target_run,
+        "sourceRun": source_run,
+        "styleIds": style_ids,
+        "createdAt": time.strftime("%Y-%m-%dT%H:%M:%SZ", time.gmtime()),
+    })
+    meta_path = out_dir / "run_meta.json"
+    write_text_atomic(meta_path, json.dumps(target_meta, ensure_ascii=False, indent=2))
     return out_dir
 
 
 def source_run_iteration_rows(data, source_run):
     report_json, _ = write_run_report(data, source_run)
     report = json.loads(report_json.read_text(encoding="utf-8"))
-    styles_by_id = {style["id"]: style for style in data["styles"]}
+    theme = load_run_theme(data, source_run)
     rows = []
     for style_report in report["styles"]:
-        style = styles_by_id[style_report["styleId"]]
+        style_id = style_report["styleId"]
+        style = resolve_style_record(
+            data,
+            style_id,
+            style_report.get("labelJa", style_id),
+        )
+        if style is None:
+            continue
         best = best_image_for_style(style_report)
         rows.append({
-            "styleId": style["id"],
-            "labelJa": style["labelJa"],
+            "styleId": style_id,
+            "labelJa": style.get("labelJa", style_id),
             "bestImage": None if best is None else best.get("path"),
             "bestFinalScore": None if best is None else best.get("finalScore"),
             "bestAutomaticScore": None if best is None else best.get("targetAutomaticScore"),
             "targetRank": None if best is None else best.get("targetRank"),
             "passed": False if best is None else bool(best.get("passed")),
             "failureReasons": [] if best is None else best.get("failureReasons", []),
-            "constraints": improvement_constraints_for_style(style, style_report)
+            "constraints": improvement_constraints_for_style(style, style_report, theme=theme)
         })
     return rows, report
 
@@ -1418,7 +1692,7 @@ def render_iteration_plan_md(data, source_run, target_run, variants, rows, sourc
     lines = [
         f"# Iteration Plan: {source_run} -> {target_run}",
         "",
-        f"Theme: {data['theme']['ja']}",
+        f"Theme: {load_run_theme(data, source_run)['ja']}",
         "",
         f"Source status: {source_report['summary']['passedStyleCount']} / {source_report['summary']['styleCount']} styles passed.",
         f"Next run variants: {variants} per style.",
@@ -1552,12 +1826,10 @@ def prompt_with_round_constraints(positive, constraints):
     return positive + ". Additional generation constraints: " + "; ".join(constraints)
 
 
-def variant_focus(style, index):
+def variant_focus(style, index, theme=None):
     fingerprint = style["visualFingerprint"]
     directions = [
-        (
-            "subject clarity variant: make the walking pose, full body silhouette, outdoor cue, and lidded takeaway coffee cup immediately readable at thumbnail size"
-        ),
+        theme_subject_clarity_focus(theme),
         (
             f"composition and palette variant: emphasize {fingerprint['composition']}; preserve {fingerprint['color']}; keep the scene simple and balanced"
         ),
@@ -1612,8 +1884,9 @@ def write_generation_plan(data, run_id, variants=3):
     out_md = ROOT / "prompt_runs" / run_id / "generation_plan.md"
     out_csv = ROOT / "prompt_runs" / run_id / "generation_jobs.csv"
     (ROOT / "prompt_runs" / run_id).mkdir(parents=True, exist_ok=True)
+    theme = load_run_theme(data, run_id)
     jobs = []
-    for style in data["styles"]:
+    for style in styles_for_run(data, run_id):
         prompt_path = ROOT / "prompt_runs" / run_id / f"{style['id']}.md"
         if not prompt_path.exists():
             raise SystemExit(f"Prompt file not found: {prompt_path}")
@@ -1629,7 +1902,7 @@ def write_generation_plan(data, run_id, variants=3):
         for index in range(variants):
             suffix = chr(ord("a") + index)
             output = str(generated_dir / f"round_01_{suffix}.png")
-            focus = variant_focus(style, index)
+            focus = variant_focus(style, index, theme=theme)
             outputs.append(output)
             variant_rows.append({
                 "variant": index + 1,
@@ -1654,7 +1927,7 @@ def write_generation_plan(data, run_id, variants=3):
         })
     plan = {
         "runId": run_id,
-        "theme": data["theme"],
+        "theme": load_run_theme(data, run_id),
         "variantCountPerStyle": variants,
         "expectedImageCount": len(jobs) * variants,
         "jobs": jobs
@@ -1828,11 +2101,16 @@ def codex_saved_file_stem(style_id, output_path):
     return f"{style_id}_{Path(output_path).stem}"
 
 
-def codex_prompt_text(row):
+def codex_prompt_text(row, theme=None):
+    theme_ja = (theme or {}).get("ja", "").strip()
+    if theme_ja:
+        subject_lock = f"Keep the subject and required elements exact: {theme_ja}."
+    else:
+        subject_lock = "Follow the positive prompt subject exactly."
     return "\n".join([
         "Generate a single 2D illustration image.",
         "Do not include any text, logo, watermark, caption, or UI chrome in the image.",
-        "Keep the subject lock exact: one walking person outside holding a lidded takeaway coffee cup in one hand.",
+        subject_lock,
         f"Variant focus: {row['variantFocus'] or 'base prompt'}",
         "",
         "Positive prompt:",
@@ -1909,7 +2187,7 @@ def write_codex_prompt_files(plan):
     for row in plan_output_rows(plan):
         prompt_path = out_dir / codex_prompt_file_name(sequence, row["styleId"], row["outputPath"])
         saved_file_name = codex_saved_file_name(row["styleId"], row["outputPath"])
-        write_text_atomic(prompt_path, codex_prompt_text(row))
+        write_text_atomic(prompt_path, codex_prompt_text(row, plan.get("theme")))
         rows.append({
             "sequence": sequence,
             "styleId": row["styleId"],
@@ -2762,11 +3040,10 @@ def write_project_hub(data, run_id):
     return out_path
 
 
-def review_workbench_payload(data, run_id):
+def review_workbench_payload(data, run_id, force=False):
     plan = load_generation_plan(data, run_id)
-    report_json, _ = write_run_report(data, run_id)
+    report_json, _ = write_run_report(data, run_id, force=force)
     report = json.loads(report_json.read_text(encoding="utf-8"))
-    styles_by_id = {style["id"]: style for style in data["styles"]}
     images_by_path = {}
     for style_report in report["styles"]:
         for image in style_report.get("generatedImages", []):
@@ -2774,7 +3051,9 @@ def review_workbench_payload(data, run_id):
 
     rows = []
     for row in plan_output_rows(plan):
-        style = styles_by_id[row["styleId"]]
+        style = resolve_style_record(data, row["styleId"], row.get("labelJa", row["styleId"]))
+        if style is None:
+            continue
         image = images_by_path.get(row["outputPath"], {})
         manual = image.get("manualReview", {})
         rows.append({
@@ -2801,7 +3080,7 @@ def review_workbench_payload(data, run_id):
         })
     return {
         "runId": run_id,
-        "theme": data["theme"],
+        "theme": load_run_theme(data, run_id),
         "manualAxes": MANUAL_AXES,
         "passScore": data["globalEvaluation"]["passScore"],
         "csvFileName": f"{run_id}_manual_review_from_workbench.csv",
@@ -3458,14 +3737,11 @@ def render_visual_review_index(run_id, sheet_paths):
     return "\n".join(lines)
 
 
-def score_axis_guidance(data, style):
+def score_axis_guidance(data, style, theme=None):
+    theme = theme or data.get("theme", {})
     fingerprint = style["visualFingerprint"]
     return {
-        "subjectAdherence": [
-            "The fixed subject must be obvious before judging style quality.",
-            *[f"Must contain: {item}" for item in data["theme"]["mustContain"]],
-            "Reject or cap if the coffee cup is missing, the person is not walking, or the scene is cafe-only."
-        ],
+        "subjectAdherence": theme_subject_adherence_messages(theme),
         "lineShapeLanguage": [
             f"Line: {fingerprint['line']}",
             f"Shape: {fingerprint['shape']}",
@@ -3478,19 +3754,15 @@ def score_axis_guidance(data, style):
             f"Style weight textureMedium={style['styleScoringWeights']['textureMedium']}, palette={style['styleScoringWeights']['palette']}"
         ],
         "compositionIntent": [
-            f"Composition: {fingerprint['composition']}",
+            *theme_composition_messages(theme, fingerprint),
             f"Style weight composition={style['styleScoringWeights']['composition']}",
-            "The generated image should preserve the reference density and whitespace while keeping the walking person readable."
         ],
         "stylePurity": [
             "Do not reward a good-looking image if it drifts into an adjacent style.",
             "Negative markers: " + ", ".join(style["negativeFragments"]),
-            "Global avoid list: " + ", ".join(data["theme"]["mustAvoid"])
+            "Global avoid list: " + ", ".join(theme.get("mustAvoid", data["theme"].get("mustAvoid", [])))
         ],
-        "productionUsefulness": [
-            "The image should be usable as a finished illustration candidate, not only as a style test.",
-            "The coffee cup, walking pose, and main silhouette should remain legible at thumbnail size."
-        ]
+        "productionUsefulness": theme_production_usefulness_messages(theme)
     }
 
 
@@ -3499,12 +3771,13 @@ def render_review_guide_md(data, run_id):
     if not plan_path.exists():
         write_generation_plan(data, run_id, 3)
     plan = json.loads(plan_path.read_text(encoding="utf-8"))
+    theme = load_run_theme(data, run_id)
     styles_by_id = {style["id"]: style for style in data["styles"]}
     jobs_by_style = {job["styleId"]: job for job in plan["jobs"]}
     lines = [
         f"# Review Guide: {run_id}",
         "",
-        f"Theme: {data['theme']['ja']}",
+        f"Theme: {theme.get('ja', '')}",
         "",
         "Use this guide with the visual review sheets and the review sheet before entering manual scores.",
         "",
@@ -3532,7 +3805,7 @@ def render_review_guide_md(data, run_id):
     for style in data["styles"]:
         job = jobs_by_style[style["id"]]
         baseline = baseline_for_style(style)
-        guide = score_axis_guidance(data, style)
+        guide = score_axis_guidance(data, style, theme=theme)
         visual_sheet = ROOT / "reports" / f"{run_id}_visual_review" / f"{style['id']}.jpg"
         lines.extend([
             f"## {style['labelJa']} / `{style['id']}`",
@@ -3821,8 +4094,8 @@ def gate_action_for_style(style_report):
     }
 
 
-def gate_report_payload(data, run_id):
-    report_json, report_html = write_run_report(data, run_id)
+def gate_report_payload(data, run_id, force=False):
+    report_json, report_html = write_run_report(data, run_id, force=force)
     report = json.loads(report_json.read_text(encoding="utf-8"))
     audit = completion_audit(data, run_id)
     loop = loop_state(data, run_id)
@@ -3835,7 +4108,7 @@ def gate_report_payload(data, run_id):
     return {
         "runId": run_id,
         "nextRun": next_run,
-        "theme": data["theme"]["ja"],
+        "theme": load_run_theme(data, run_id)["ja"],
         "summary": report["summary"],
         "audit": audit,
         "loop": loop,

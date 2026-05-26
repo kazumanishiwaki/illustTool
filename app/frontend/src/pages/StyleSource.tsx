@@ -278,13 +278,12 @@ export default function StyleSource({ styles }: { styles: StyleSummary[] }) {
   }
 
   return (
-    <div className="page">
+    <div className="page styles-page">
       <h2>スタイル設定</h2>
       <p className="hint">
-        5つのスタイルを解析したプロンプト断片。値を編集して「保存」を押すと
-        <code>data/style_fingerprints.json</code>{" "}
-        に書き戻されます（既存ファイルは
-        <code>data/_backups/</code> に自動退避）。
+        生成プロンプトに混ぜ込む断片・特徴の編集（通常は変更不要）。
+        保存すると <code>data/style_fingerprints.json</code> に書き戻し、
+        既存ファイルは <code>data/_backups/</code> に退避されます。
       </p>
 
       <div className="ss-groups">
